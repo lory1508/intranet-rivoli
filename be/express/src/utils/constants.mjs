@@ -17,7 +17,13 @@ const mockProducts = [
   { id: 6, name: "iPhone 15 Pro", price: 549.99},
 ]
 
+// settings
+const PORT = 5050
+const ATLAS_URI = "mongodb://localhost:27017/"
+
 export {
   mockUsers,
-  mockProducts
+  mockProducts,
+  PORT,
+  ATLAS_URI
 }
