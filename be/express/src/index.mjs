@@ -1,5 +1,6 @@
 import express from "express";
 import cookieParser from "cookie-parser";
+import cors from "cors"
 
 // Load environment variables
 import "./loadEnvironment.mjs";
@@ -13,6 +14,7 @@ import { PORT } from "./utils/constants.mjs";
 const app = express();
 
 app.use(express.json());
+app.use(cors())
 app.use(cookieParser())
 app.use(routes)
 

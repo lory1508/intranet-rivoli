@@ -10,8 +10,17 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxt/image": "^1.8.1",
     "nuxt": "^3.15.1",
     "vue": "latest",
     "vue-router": "latest"
+  },
+  "devDependencies": {
+    "@vicons/ionicons5": "^0.13.0",
+    "autoprefixer": "^10.4.20",
+    "naive-ui": "^2.41.0",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "vfonts": "^0.0.3"
   }
 }

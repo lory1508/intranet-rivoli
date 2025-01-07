@@ -1,8 +1,9 @@
 <template>
-  <NuxtLoadingIndicator/>
-  <NuxtLayout>
-  </NuxtLayout>
+  <div>
+    Divisioni
+  </div>
 </template>
 
 <script setup lang="ts">
+
 </script>

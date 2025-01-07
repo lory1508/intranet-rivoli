@@ -1,8 +1,9 @@
 <template>
-  <NuxtLoadingIndicator/>
-  <NuxtLayout>
-  </NuxtLayout>
+  <div>
+    News List
+  </div>
 </template>
 
 <script setup lang="ts">
+
 </script>
