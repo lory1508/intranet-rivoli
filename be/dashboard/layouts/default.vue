@@ -21,26 +21,37 @@
     <div class="flex flex-row w-full gap-2">
 
       <!-- menu -->
-      <div class="flex flex-col gap-2 p-4">
+      <div class="flex flex-col gap-2 p-4 w-52">
         <NuxtLink class="py-1" to="/">Dashboard</NuxtLink>
-        <NCollapse arrow-placement="right">
-          <NCollapseItem title="Organizzazione" name="1">
+        <NCollapse arrow-placement="right" >
+          <NCollapseItem name="organizzazione" >
+            <template #header>
+              <div :class="isOrganizzazioneActive ? 'border-b-2 border-b-rose-400 px-2 -mx-2': ''">
+                Organizzazione
+              </div>
+            </template>
             <div class="flex flex-col gap-2">
               <NuxtLink class="py-1" to="/organizzazione/divisione">Divisioni</NuxtLink>
               <NuxtLink class="py-1" to="/organizzazione/ufficio">Uffici</NuxtLink>
-              <NuxtLink class="py-1" to="/organizzazione/servizio">Servizi</NuxtLink>
+              <NuxtLink class="py-1 border-b border-stone-500" to="/organizzazione/servizio">Servizi</NuxtLink>
             </div>
           </NCollapseItem>
         </NCollapse>
         <NuxtLink class="py-1" to="/dipendenti">Contatti</NuxtLink>
         <NuxtLink class="py-1" to="/news">News</NuxtLink>
         <NuxtLink class="py-1" to="/eventi">Eventi</NuxtLink>
-        <NCollapse arrow-placement="right">
-          <NCollapseItem title="Contenuti" name="1">
+        <NCollapse arrow-placement="right" >
+          <NCollapseItem name="contenuti">
+            <template #header>
+              <div :class="isContenutiActive ? 'border-b-2 border-b-rose-400 px-2 -mx-2': ''">
+                Contenuti
+              </div>
+            </template>
             <div class="flex flex-col gap-2">
               <NuxtLink class="py-1" to="/contenuti/link">Link</NuxtLink>
               <NuxtLink class="py-1" to="/contenuti/download">Download</NuxtLink>
-              <NuxtLink class="py-1" to="/contenuti/avvocatura">Avvocatura</NuxtLink>
+              <NuxtLink class="py-1 border-b border-stone-500" to="/contenuti/avvocatura">Avvocatura</NuxtLink>
+              <NDivider />
             </div>
           </NCollapseItem>
         </NCollapse>
@@ -53,10 +64,25 @@
 </template>
 
 <script setup lang="ts">
-import { NCollapse, NCollapseItem, NImage, NInput, NIcon } from 'naive-ui'
+import { NCollapse, NCollapseItem, NImage, NInput, NIcon, NDivider } from 'naive-ui'
 import { LOGO_PATH } from '#build/imports';
 import { Search } from '@vicons/ionicons5'
 
+import { ref, watch } from 'vue'
+
+const route = useRoute()
+
+const isOrganizzazioneActive = ref(false)
+const isContenutiActive = ref(false)
+
+watch(
+  () => route.path,
+  (newValue, oldValue) => {
+    isOrganizzazioneActive.value = newValue.includes("organizzazione")
+    isContenutiActive.value = newValue.includes("contenuti")
+  },
+  { deep: true }
+)
 </script>
 
 <style>
