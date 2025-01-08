@@ -1,5 +1,5 @@
 <template>
-  <div class="w-screen h-screen gap-4 p-2 bg-gradient-to-br from-zinc-50 to-stone-300">
+  <div class="w-screen h-screen gap-4 px-4 py-2 bg-gradient-to-br from-indigo-50 to-indigo-200">
     <!-- Navbar -->
     <div class="flex flex-row items-center justify-between w-full gap-2 px-4 py-2">
       <div class="flex flex-row items-center gap-4">
@@ -56,7 +56,7 @@
           </NCollapseItem>
         </NCollapse>
       </div>
-      <div class="w-full h-full p-4 bg-white bg-opacity-50 shadow rounded-2xl backdrop-blur-lg">
+      <div class="w-full h-full p-4 bg-white shadow bg-opacity-70 rounded-2xl backdrop-blur-xl">
         <NuxtPage />
       </div>
     </div>

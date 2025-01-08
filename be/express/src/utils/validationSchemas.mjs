@@ -20,3 +20,18 @@ export const createUserValidationSchema = {
     }
   }
 }
+
+export const createDepartmentValidationSchema = {
+  name: {
+    isLength: {
+      options: {
+        min: 5,
+        max: 150
+      },
+      errorMessage: "Il nome della divisione dev'essere di almeno 5 caratteri e massimo 150"
+    },
+    notEmpty: {
+      errorMessage: "Il nome non può essere vuoto"
+    },
+  },
+}

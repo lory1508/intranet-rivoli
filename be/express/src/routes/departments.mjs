@@ -1,17 +1,17 @@
 import { Router } from 'express'
 import { query, validationResult, checkSchema, matchedData } from 'express-validator';
-import { createUserValidationSchema } from '../utils/validationSchemas.mjs';
+import { createDepartmentValidationSchema } from '../utils/validationSchemas.mjs';
 import { BSON } from 'bson';
 import db from '../../db/conn.mjs';
 
 const router = Router()
-const COLLECTION = "users"
+const COLLECTION = "departments"
 
 /**
- * Get users
+ * Get departments
  */
 router.get(
-  "/api/users", 
+  `/api/${COLLECTION}`, 
   query('filter')
   .isString()
   .withMessage('Must be a string')
@@ -35,16 +35,16 @@ router.get(
 );
 
 /**
- * Create user
+ * Create department
  */
 router.post(
-  "/api/users/", 
-  checkSchema(createUserValidationSchema), 
+  `/api/${COLLECTION}/`, 
+  checkSchema(createDepartmentValidationSchema), 
   async (req, res) => {
     const validation = validationResult(req)
     
     if(!validation.isEmpty())
-      return res.status(400).send({errors: result.array()})
+      return res.sendStatus(400)
 
     let collection = await db.collection(COLLECTION);
     const newDocument = matchedData(req)
@@ -56,9 +56,9 @@ router.post(
 );
 
 /**
- * Get user by ID
+ * Get department by ID
  */
-router.get("/api/users/:id", async (req, res) => {
+router.get(`/api/${COLLECTION}/:id`, async (req, res) => {
   // Get a single post
   let collection = await db.collection(COLLECTION);
   let query = {_id: new BSON.ObjectId(req.params.id)};
@@ -71,9 +71,9 @@ router.get("/api/users/:id", async (req, res) => {
 });
 
 /**
- * Update user
+ * Update department
  */
-router.patch("/api/users/:id", async (req, res) => {
+router.patch(`/api/${COLLECTION}/:id`, async (req, res) => {
   const query = { _id: new BSON.ObjectId(req.params.id) };
   const updates = {
     $set: { 
@@ -87,9 +87,9 @@ router.patch("/api/users/:id", async (req, res) => {
 });
 
 /**
- * Delete user
+ * Delete department
  */
-router.delete("/api/users/:id", async (req, res) => {
+router.delete(`/api/${COLLECTION}/:id`, async (req, res) => {
   const query = { _id: ObjectId(req.params.id) };
   const collection = db.collection(COLLECTION);
   let result = await collection.deleteOne(query);
