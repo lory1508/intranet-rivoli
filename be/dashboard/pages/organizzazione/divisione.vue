@@ -1,9 +1,19 @@
 <template>
-  <Loader v-if="loadingPage" />
-  <div v-else class="flex flex-col gap-2">
-    <div class="flex flex-row gap-2">
+  <Loader v-if="loading" />
+  <div v-else class="flex flex-col">
+    <div class="flex flex-row gap-2 h-fit">
       <NH1>Divisioni</NH1>
-      <NIcon :component="AddCircle" size="32" class="mt-2 transition-all duration-500 cursor-pointer text-rose-400 hover:text-rose-600" @click="createDivisione"/>
+
+      <NPopover trigger="hover">
+        <template #trigger>
+          <NButton circle icon-placement="right" class="mt-2" color="#fb7185" size="small" @click="createDivisione">
+            <template #icon>
+              <NIcon :component="Add" size="26" />
+            </template>
+          </NButton>
+        </template>
+        <span>Crea nuova divisione</span>
+      </NPopover>
     </div>
 
     <NDataTable
@@ -13,12 +23,12 @@
       :bordered="false"
     />
   </div>
-  <DepartmentModal ref="departmentModalRef" />
+  <DepartmentModal ref="departmentModalRef" @close="getDepartmentsFromBE" />
 </template>
 
 <script setup>
-import { NH1, NIcon, NDataTable, NButton } from 'naive-ui'
-import { AddCircle } from '@vicons/ionicons5'
+import { NH1, NIcon, NDataTable, NButton, NPopover } from 'naive-ui'
+import { Add } from '@vicons/ionicons5'
 import { ref, h } from 'vue'
 import { getDepartments } from '~/api'
 import { Pencil } from '@vicons/ionicons5'
@@ -30,7 +40,7 @@ import Loader from '~/components/Loader.vue'
 
 const departments = ref([])
 const pagination = ref(false)
-const loadingPage = ref(true)
+const loading = ref(true)
 
 const departmentModalRef = ref()
 
@@ -75,13 +85,18 @@ const createDivisione = async () => {
   departmentModalRef.value.show = !departmentModalRef.value.show
 }
 
-onMounted(async () => {
+const getDepartmentsFromBE = async () => {
   try{
+    loading.value = true
     departments.value = await getDepartments()
   } catch (err) {
     console.error(err)
   } finally {
-    loadingPage.value = false
+    loading.value = false
   }
+}
+
+onMounted(async () => {
+  await getDepartmentsFromBE()
 })
 </script>

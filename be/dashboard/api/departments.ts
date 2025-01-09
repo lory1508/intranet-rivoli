@@ -21,7 +21,7 @@ const updateDepartment = async (id: string, body: object) => {
 }
 
 const createDepartment = async (body: object) => {
-  const data = await $fetch(`${BE_PATH}/${COLLECTION}/${id}`, {
+  const data = await $fetch(`${BE_PATH}/${COLLECTION}`, {
     method: 'POST',
     body
   })

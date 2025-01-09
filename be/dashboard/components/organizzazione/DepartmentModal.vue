@@ -8,7 +8,6 @@
       role="dialog"
       aria-modal="true"
     >
-    <pre>{{ newDepartment }}</pre>
       <NForm>
         <NFormItem path="name" label="Nome">
           <NInput round placeholder="Nome" v-model:value="newDepartment.name"/>
@@ -16,10 +15,10 @@
       </NForm>
       <template #footer>
         <div class="flex flex-row gap-2">
-          <NButton round secondary type="error">
+          <NButton round secondary type="error" @click="show=false">
             Annulla
           </NButton>
-          <NButton round secondary type="success">
+          <NButton round secondary type="success" @click="createOrUpdateDepartment">
             <template #icon>
               <NIcon>
                 <Save />
@@ -35,27 +34,60 @@
 
 <script setup>
 import { NModal, NCard, NButton, NIcon, NInput, NForm, NFormItem } from 'naive-ui';
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { Save } from '@vicons/ionicons5'
+import { createDepartment, updateDepartment } from '~/api';
 
 const props = defineProps({
-  department: Object
+  department: {
+    type: Object,
+    default: {
+      name: ""
+    }
+  }
 })
+const emit = defineEmits(['close'])
 
 const show = ref(false)
+const loading = ref(false)
+const isCreate = ref(false)
 const newDepartment = ref({
   name: ""
 })
 
+const createOrUpdateDepartment = async () => {
+  try{
+    loading.value = true
+    if(isCreate) {
+      const res =await createDepartment(newDepartment.value)
+    } else {
+      console.log("updating")
+    }
+    show.value = false
+  } catch (err) {
+    console.error(err)
+  } finally {
+    loading.value = false
+  }
+}
+
 const title = computed(() => {
-  if(props.department)
+  if(props.department.name)
     return "Aggiorna divisione"
   else
     return "Crea divisione"
 })
 
+watch(show, (newShowValue) => {
+  if(!newShowValue){
+    newDepartment.value.name = ""
+    emit('close')
+  }
+})
+
 onMounted(() => {
   newDepartment.value = props.department || {}
+  isCreate.value = Boolean(props.department) || true
 })
 
 defineExpose({
