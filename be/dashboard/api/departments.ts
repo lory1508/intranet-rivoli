@@ -12,7 +12,10 @@ const getDepartment = async (id: string) => {
   return data
 }
 
-const updateDepartment = async (id: string, body: object) => {
+const updateDepartment = async (department: object) => {
+  const id = department._id
+  const body = { ...department }
+  delete body._id
   const data = await $fetch(`${BE_PATH}/${COLLECTION}/${id}`, {
     method: 'PATCH',
     body

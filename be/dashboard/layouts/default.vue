@@ -46,12 +46,7 @@ import { LOGO_PATH } from '#build/imports';
 import { Search, People, Apps, Podium, Newspaper, Calendar, FolderOpen } from '@vicons/ionicons5'
 import MenuItem from '~/components/MenuItem.vue';
 
-import { ref, watch } from 'vue'
-
-const route = useRoute()
-
-const isOrganizzazioneActive = ref(false)
-const isContenutiActive = ref(false)
+import { ref } from 'vue'
 
 const menu = ref([
   {

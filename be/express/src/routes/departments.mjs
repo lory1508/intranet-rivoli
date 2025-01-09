@@ -90,7 +90,7 @@ router.patch(`/api/${COLLECTION}/:id`, async (req, res) => {
  * Delete department
  */
 router.delete(`/api/${COLLECTION}/:id`, async (req, res) => {
-  const query = { _id: ObjectId(req.params.id) };
+  const query = { _id: new BSON.ObjectId(req.params.id) };
   const collection = db.collection(COLLECTION);
   let result = await collection.deleteOne(query);
   return res.send(result).status(200);

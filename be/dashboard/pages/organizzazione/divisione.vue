@@ -23,15 +23,14 @@
       :bordered="false"
     />
   </div>
-  <DepartmentModal ref="departmentModalRef" @close="getDepartmentsFromBE" />
+  <DepartmentModal ref="departmentModalRef" :department="departmentToBeUpdated" @close="getDepartmentsFromBE" />
 </template>
 
 <script setup>
-import { NH1, NIcon, NDataTable, NButton, NPopover } from 'naive-ui'
-import { Add } from '@vicons/ionicons5'
+import { NH1, NIcon, NDataTable, NButton, NButtonGroup, NPopover, NPopconfirm } from 'naive-ui'
+import { Add, Trash, Pencil } from '@vicons/ionicons5'
 import { ref, h } from 'vue'
-import { getDepartments } from '~/api'
-import { Pencil } from '@vicons/ionicons5'
+import { getDepartments, deleteDepartment } from '~/api'
 import { formatDate } from '@/utils/utils'
 
 // components
@@ -41,47 +40,80 @@ import Loader from '~/components/Loader.vue'
 const departments = ref([])
 const pagination = ref(false)
 const loading = ref(true)
+const departmentToBeUpdated = ref()
 
 const departmentModalRef = ref()
 
 const columns = [
-    {
-      title: "Nome",
-      key: "name"
-    },
-    {
-      title: "Creato il",
-      key: "created_at",
-      render(row) {
-        return formatDate(row.created_at)
-      }
-    },
-    {
-      title: "Azioni",
-      key: "actions",
-      render(row) {
-        return h(
-          NButton,
-          {
-            strong: true,
-            tertiary: true,
-            size: "small",
-            onClick: () => departmentModalRef.value.show = !departmentModalRef.value.show
-          },
-          { default: () => h(
-              NIcon,
-              {
-                component: Pencil
-              }
-            ) 
-          }
-        );
-      }
+  {
+    title: "Nome",
+    key: "name"
+  },
+  {
+    title: "Creato il",
+    key: "created_at",
+    render(row) {
+      return formatDate(row.created_at)
     }
-  ];
+  },
+  {
+    key: "actions",
+    render(row) {
+      return h(
+        NButtonGroup,
+        [
+          h(
+            NButton,
+            {
+              strong: false,
+              round: true,
+              secondary: true,
+              type: "warning",
+              size: "small",
+              class: "mr-2",
+              onClick: () => openDepartmentModal('update', row)
+            },
+            { default: () => "Modifica"
+            },
+          ),
+          h(
+            NPopconfirm,
+            {
+              onPositiveClick: () => deleteDepartmentFromBE(row._id),
+              positiveButtonProps: {
+                type: "error"
+              }
+            },
+            {
+              default: () => "Confermi di voler cancellare questa divisione?",
+              trigger: () => h(
+                NButton,
+                {
+                  strong: false,
+                  round: true,
+                  secondary: true,
+                  type: "error",
+                  size: "small",
+                },
+                { 
+                  default: () => "Elimina"
+                },
+              )
+            }
+          )
+        ]
+      )
+    }
+  }
+];
 
 const createDivisione = async () => {
-  console.log("CREATE")
+  departmentModalRef.value.show = !departmentModalRef.value.show
+}
+
+const openDepartmentModal = (operation = 'create', department) => {
+  if(operation=='update')
+    departmentToBeUpdated.value = department
   departmentModalRef.value.show = !departmentModalRef.value.show
 }
 
@@ -90,6 +122,18 @@ const getDepartmentsFromBE = async () => {
     loading.value = true
     departments.value = await getDepartments()
   } catch (err) {
+    console.error(err)
+  } finally {
+    loading.value = false
+  }
+}
+
+const deleteDepartmentFromBE = async (id) => {
+  try{
+    loading.value = true
+    await deleteDepartment(id)
+    await getDepartmentsFromBE()
+  } catch ( err ) {
     console.error(err)
   } finally {
     loading.value = false

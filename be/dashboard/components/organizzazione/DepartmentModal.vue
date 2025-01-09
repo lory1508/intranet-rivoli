@@ -58,10 +58,10 @@ const newDepartment = ref({
 const createOrUpdateDepartment = async () => {
   try{
     loading.value = true
-    if(isCreate) {
-      const res =await createDepartment(newDepartment.value)
+    if(isCreate.value) {
+      const res = await createDepartment(newDepartment.value)
     } else {
-      console.log("updating")
+      const res = await updateDepartment(newDepartment.value)
     }
     show.value = false
   } catch (err) {
@@ -79,15 +79,14 @@ const title = computed(() => {
 })
 
 watch(show, (newShowValue) => {
+  console.log("POPOPOPOP",newShowValue)
   if(!newShowValue){
     newDepartment.value.name = ""
     emit('close')
+  } else {
+    newDepartment.value = props.department || {}
+    isCreate.value = !Boolean(props.department)
   }
-})
-
-onMounted(() => {
-  newDepartment.value = props.department || {}
-  isCreate.value = Boolean(props.department) || true
 })
 
 defineExpose({
