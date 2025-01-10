@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { query, validationResult, checkSchema, matchedData } from 'express-validator';
+import { validationResult, checkSchema, matchedData } from 'express-validator';
 import { createServiceValidationSchema } from '../utils/validationSchemas.mjs';
 import { BSON } from 'bson';
 import db from '../../db/conn.mjs';
@@ -59,6 +59,7 @@ router.post(
 
     let collection = await db.collection(COLLECTION);
     const newDocument = matchedData(req)
+    newDocument.department_id = new BSON.ObjectId(newDocument.department_id)
     newDocument.created_at = new Date();
     let result = await collection.insertOne(newDocument);
     return res.send(result).status(204);

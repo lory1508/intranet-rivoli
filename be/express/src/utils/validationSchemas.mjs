@@ -49,7 +49,7 @@ export const createServiceValidationSchema = {
       errorMessage: "Il nome non può essere vuoto"
     },
   },
-  department: {
+  department_id: {
     notEmpty: {
       errorMessage: "La direzione non può essere vuota"
     },

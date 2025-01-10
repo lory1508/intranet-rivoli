@@ -14,7 +14,7 @@
         </NFormItem>
         <NFormItem path="department" :label="labels.columns.department">
           <NSelect
-            v-model:value="newService.department"
+            v-model:value="newService.department_id"
             filterable
             round
             :placeholder="labels.columns.department"
@@ -48,13 +48,14 @@ import { Save } from '@vicons/ionicons5'
 import { createService, updateService, getDepartments } from '~/api';
 import { MIN_LENGTH_NAME, MAX_LENGTH_NAME } from '#build/imports';
 import labels from '@/utils/labels/it.json'
+import mongoose from "mongoose"
 
 const props = defineProps({
   service: {
     type: Object,
     default: {
       name: "",
-      department: ""
+      department_id: ""
     }
   }
 })
@@ -67,7 +68,7 @@ const departments = ref([])
 const isCreate = ref(false)
 const newService = ref({
   name: "",
-  department: ""
+  department_id: ""
 })
 
 const rules = ref({
@@ -88,7 +89,7 @@ const rules = ref({
       trigger: ["input", "blur"]
     },
   ],
-  department: [
+  department_id: [
     {
       required: true,
       message: labels.validations.required,
@@ -126,7 +127,7 @@ const getDepartmenstFromBE = async () => {
     const data = await getDepartments()
     departments.value = data.map((dep) => {
       return {
-        value: dep._id,
+        value: new mongoose.Types.ObjectId(dep._id),
         label: dep.name
       }
     })
@@ -136,10 +137,11 @@ const getDepartmenstFromBE = async () => {
 }
 
 watch(show, async (newShowValue) => {
+  console.log(newShowValue)
   if(!newShowValue){
     newService.value={
       name: "",
-      department: ""
+      department_id: ""
     }
     emit('close')
   } else {
@@ -151,7 +153,7 @@ watch(show, async (newShowValue) => {
 
 watch(newService, 
   (newValue) => {
-    showError.value = (newValue.name.length < MIN_LENGTH_NAME || newValue.name.length > MAX_LENGTH_NAME) || !newValue.department
+    showError.value = (newValue.name.length < MIN_LENGTH_NAME || newValue.name.length > MAX_LENGTH_NAME) || !newValue.department_id
   },
   { deep: true }
 )
