@@ -61,9 +61,9 @@ const menu = ref([
     icon: Podium,
     children: [
       {
-        label: 'Divisioni',
-        to: '/organizzazione/divisione',
-        slug: 'organizzazione-divisione'
+        label: 'Direzioni',
+        to: '/organizzazione/direzione',
+        slug: 'organizzazione-direzione'
       },
       {
         label: 'Uffici',
@@ -101,7 +101,7 @@ const menu = ref([
     icon: FolderOpen,
     children: [
       {
-        label: 'Divisioni',
+        label: 'Link',
         to: '/contenuti/link',
         slug: 'contenuti-link'
       },

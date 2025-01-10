@@ -24,11 +24,15 @@ const updateDepartment = async (department: object) => {
 }
 
 const createDepartment = async (body: object) => {
-  const data = await $fetch(`${BE_PATH}/${COLLECTION}`, {
-    method: 'POST',
-    body
-  })
-  return data
+  try{
+    const data = await $fetch(`${BE_PATH}/${COLLECTION}`, {
+      method: 'POST',
+      body
+    })
+    return data
+  } catch(err) {
+    console.error(err)
+  }
 }
 
 const deleteDepartment = async (id: string) => {

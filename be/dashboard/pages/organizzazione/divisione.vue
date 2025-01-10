@@ -2,17 +2,17 @@
   <Loader v-if="loading" />
   <div v-else class="flex flex-col">
     <div class="flex flex-row gap-2 h-fit">
-      <NH1>Divisioni</NH1>
+      <NH1>Direzioni</NH1>
 
       <NPopover trigger="hover">
         <template #trigger>
-          <NButton circle icon-placement="right" class="mt-2" color="#fb7185" size="small" @click="createDivisione">
+          <NButton circle icon-placement="right" class="mt-2" color="#fb7185" size="small" @click="createDepartment">
             <template #icon>
               <NIcon :component="Add" size="26" />
             </template>
           </NButton>
         </template>
-        <span>Crea nuova divisione</span>
+        <span>Crea nuova direzione</span>
       </NPopover>
     </div>
 
@@ -85,7 +85,7 @@ const columns = [
               }
             },
             {
-              default: () => "Confermi di voler cancellare questa divisione?",
+              default: () => "Confermi di voler cancellare questa direzione?",
               trigger: () => h(
                 NButton,
                 {
@@ -107,7 +107,7 @@ const columns = [
   }
 ];
 
-const createDivisione = async () => {
+const createDepartment = async () => {
   departmentModalRef.value.show = !departmentModalRef.value.show
 }
 
