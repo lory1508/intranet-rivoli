@@ -66,14 +66,14 @@ const menu = ref([
         slug: 'organizzazione-direzione'
       },
       {
-        label: 'Uffici',
-        to: '/organizzazione/ufficio',
-        slug: 'organizzazione-ufficio'
-      },
-      {
         label: 'Servizi',
         to: '/organizzazione/servizio',
         slug: 'organizzazione-servizio'
+      },
+      {
+        label: 'Uffici',
+        to: '/organizzazione/ufficio',
+        slug: 'organizzazione-ufficio'
       },
     ]
   },
