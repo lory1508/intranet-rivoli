@@ -2,7 +2,7 @@
   <Loader v-if="loading" />
   <div v-else class="flex flex-col">
     <div class="flex flex-row gap-2 h-fit">
-      <NH1>Direzioni</NH1>
+      <NH1>{{labels.department.title}}</NH1>
 
       <NPopover trigger="hover">
         <template #trigger>
@@ -12,7 +12,7 @@
             </template>
           </NButton>
         </template>
-        <span>Crea nuova direzione</span>
+        <span>{{ labels.department.create.label }}</span>
       </NPopover>
     </div>
 
@@ -28,10 +28,11 @@
 
 <script setup>
 import { NH1, NIcon, NDataTable, NButton, NButtonGroup, NPopover, NPopconfirm } from 'naive-ui'
-import { Add, Trash, Pencil } from '@vicons/ionicons5'
+import { Add } from '@vicons/ionicons5'
 import { ref, h } from 'vue'
 import { getDepartments, deleteDepartment } from '~/api'
 import { formatDate } from '@/utils/utils'
+import labels from '@/utils/labels/it.json'
 
 // components
 import DepartmentModal from '~/components/organizzazione/DepartmentModal.vue'
@@ -46,11 +47,11 @@ const departmentModalRef = ref()
 
 const columns = [
   {
-    title: "Nome",
+    title: labels.columns.name,
     key: "name"
   },
   {
-    title: "Creato il",
+    title: labels.columns.createdAt,
     key: "created_at",
     render(row) {
       return formatDate(row.created_at)
@@ -73,7 +74,7 @@ const columns = [
               class: "mr-2",
               onClick: () => openDepartmentModal('update', row)
             },
-            { default: () => "Modifica"
+            { default: () => labels.actions.edit
             },
           ),
           h(
@@ -85,7 +86,7 @@ const columns = [
               }
             },
             {
-              default: () => "Confermi di voler cancellare questa direzione?",
+              default: () => labels.actions.confirmDelete,
               trigger: () => h(
                 NButton,
                 {
@@ -96,7 +97,7 @@ const columns = [
                   size: "small",
                 },
                 { 
-                  default: () => "Elimina"
+                  default: () => labels.actions.delete
                 },
               )
             }

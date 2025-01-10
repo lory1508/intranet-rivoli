@@ -1,45 +1,53 @@
 import { Router } from 'express'
 import { query, validationResult, checkSchema, matchedData } from 'express-validator';
-import { createDepartmentValidationSchema } from '../utils/validationSchemas.mjs';
+import { createServiceValidationSchema } from '../utils/validationSchemas.mjs';
 import { BSON } from 'bson';
 import db from '../../db/conn.mjs';
 
 const router = Router()
-const COLLECTION = "departments"
+const COLLECTION = "services"
 
 /**
- * Get departments
+ * Get services
  */
 router.get(
   `/api/${COLLECTION}`, 
-  query('filter')
-  .isString()
-  .withMessage('Must be a string')
-  .isLength({ min: 3, max: 10})
-  .withMessage("Must be at least 3-10 characters"), 
   async (req, res) => {
     let collection = await db.collection(COLLECTION)  
     const {
       query: { filter, value },
     } = req;
 
-    let results = await collection.find({}).toArray()
+    let results = await collection.aggregate([
+      {
+        $lookup: {
+          from: 'departments',
+          localField: "department_id",
+          foreignField: "_id",
+          as: "department_info"
+        }
+      }
+    ]).toArray()
+    
+    // let results = await collection.find({}).toArray()
+    return res.status(200).send(results);
+
+    
     // .limit(50)
     
     // filter results
-    if (filter && value)
-      return res.sendStatus(500)
+    // if (filter && value)
+    //   return res.sendStatus(500)
 
-    return res.status(200).send(results);
   }
 );
 
 /**
- * Create department
+ * Create service
  */
 router.post(
   `/api/${COLLECTION}/`, 
-  checkSchema(createDepartmentValidationSchema), 
+  checkSchema(createServiceValidationSchema), 
   async (req, res) => {
     const validationRes = validationResult(req)
     
@@ -58,7 +66,7 @@ router.post(
 );
 
 /**
- * Get department by ID
+ * Get service by ID
  */
 router.get(`/api/${COLLECTION}/:id`, async (req, res) => {
   // Get a single post
@@ -73,7 +81,7 @@ router.get(`/api/${COLLECTION}/:id`, async (req, res) => {
 });
 
 /**
- * Update department
+ * Update service
  */
 router.patch(`/api/${COLLECTION}/:id`, async (req, res) => {
   const query = { _id: new BSON.ObjectId(req.params) };
@@ -89,7 +97,7 @@ router.patch(`/api/${COLLECTION}/:id`, async (req, res) => {
 });
 
 /**
- * Delete department
+ * Delete service
  */
 router.delete(`/api/${COLLECTION}/:id`, async (req, res) => {
   const query = { _id: new BSON.ObjectId(req.params.id) };

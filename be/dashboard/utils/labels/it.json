@@ -1,0 +1,43 @@
+{
+  "department": {
+    "title": "Direzione",
+    "create": {
+      "title": "Crea direzione",
+      "label": "Crea nuova direzione"
+    },
+    "update": { 
+      "title": "Aggiorna direzione"
+    }
+  },
+  "service": {
+    "title": "Servizio",
+    "create": {
+      "title": "Crea servizio",
+      "label": "Crea nuovo servizio"
+    },
+    "update": { 
+      "title": "Aggiorna servizio"
+    }
+  },
+  "columns": {
+    "name": "Nome",
+    "department": "Direzione",
+    "service": "Servizio",
+    "createdAt": "Creato il"
+  },
+  "actions": {
+    "edit": "Modifica",
+    "cancel": "Annulla",
+    "save": "Salva",
+    "delete": "Elimina",
+    "confirmDelete": "Confermi di voler cancellare questo elemento?"
+  },
+  "alerts": {
+    "nameValidation": "Il nome dev'essere di minimo 5 caratteri e massimo 150."
+  },
+  "validations": {
+    "required": "questo campo è obbligatorio",
+    "min5": "questo campo deve essere di almeno 5 caratteri",
+    "max150": "questo campo deve essere al massimo di 150 caratteri"
+  }
+}

@@ -6,6 +6,13 @@ import {
   deleteDepartment 
 } from './departments'
 
+import {
+  getServices,
+  getService,
+  updateService,
+  createService,
+  deleteService
+} from './services'
 
 
 export {
@@ -13,5 +20,10 @@ export {
   getDepartment,
   updateDepartment,
   createDepartment,
-  deleteDepartment 
+  deleteDepartment ,
+  getServices,
+  getService,
+  updateService,
+  createService,
+  deleteService
 }

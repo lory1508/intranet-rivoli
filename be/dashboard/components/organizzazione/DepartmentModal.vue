@@ -8,18 +8,15 @@
       role="dialog"
       aria-modal="true"
     >
-      <NForm>
-        <NFormItem path="name" label="Nome">
-          <NInput round placeholder="Nome" v-model:value="newDepartment.name" :showCount="true" :maxlength="150" :minlength="5"/>
+      <NForm :model="newDepartment" :rules="rules">
+        <NFormItem path="name" :label="labels.columns.name">
+          <NInput placeholder="Nome" v-model:value="newDepartment.name" :showCount="true" :maxlength="150" :minlength="5"/>
         </NFormItem>
       </NForm>
-      <NAlert v-if="showError" type="warning">
-        Il nome dev'essere di minimo 5 caratteri e massimo 150.
-      </NAlert>
       <template #footer>
         <div class="flex flex-row gap-2">
           <NButton round secondary type="error" @click="show=false">
-            Annulla
+            {{labels.actions.cancel}}
           </NButton>
           <NButton round secondary type="success" :disabled="showError" @click="createOrUpdateDepartment">
             <template #icon>
@@ -27,7 +24,7 @@
                 <Save />
               </NIcon>
             </template>
-            Salva
+            {{labels.actions.save}}
           </NButton>
         </div>
       </template>
@@ -36,11 +33,12 @@
 </template>
 
 <script setup>
-import { NModal, NCard, NButton, NIcon, NInput, NForm, NFormItem, NAlert } from 'naive-ui';
+import { NModal, NCard, NButton, NIcon, NInput, NForm, NFormItem } from 'naive-ui';
 import { ref, computed, watch } from 'vue'
 import { Save } from '@vicons/ionicons5'
 import { createDepartment, updateDepartment } from '~/api';
 import { MIN_LENGTH_NAME, MAX_LENGTH_NAME } from '#build/imports';
+import labels from '@/utils/labels/it.json'
 
 const props = defineProps({
   department: {
@@ -58,6 +56,26 @@ const loading = ref(false)
 const isCreate = ref(false)
 const newDepartment = ref({
   name: ""
+})
+
+const rules = ref({
+  name: [
+    {
+      required: true,
+      message: labels.validations.required,
+      trigger: ['input', 'blur', 'focus']
+    },
+    {
+      min: 5,
+      message: labels.validations.min5,
+      trigger: ["input", "blur"]
+    },
+    {
+      max: 150,
+      message: labels.validations.max150,
+      trigger: ["input", "blur"]
+    },
+  ]
 })
 
 const createOrUpdateDepartment = async () => {
@@ -79,9 +97,9 @@ const createOrUpdateDepartment = async () => {
 
 const title = computed(() => {
   if(props.department.name)
-    return "Aggiorna direzione"
+    return labels.department.update.title
   else
-    return "Crea direzione"
+    return labels.department.create.title
 })
 
 watch(show, (newShowValue) => {
