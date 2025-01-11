@@ -127,7 +127,7 @@ const getDepartmenstFromBE = async () => {
     const data = await getDepartments()
     departments.value = data.map((dep) => {
       return {
-        value: new mongoose.Types.ObjectId(dep._id),
+        value: dep._id,
         label: dep.name
       }
     })
@@ -137,7 +137,6 @@ const getDepartmenstFromBE = async () => {
 }
 
 watch(show, async (newShowValue) => {
-  console.log(newShowValue)
   if(!newShowValue){
     newService.value={
       name: "",
@@ -146,14 +145,26 @@ watch(show, async (newShowValue) => {
     emit('close')
   } else {
     await getDepartmenstFromBE()
-    newService.value = props.service || {}
+    if(props.service){
+      console.log(props.service)
+      newService.value = {
+        name: props.service.name,
+        department_id: props.service.department_id
+      }
+
+    } else {
+      newService.value = {
+        name: "",
+        department_id: ""
+      }
+    }
     isCreate.value = !Boolean(props.service?.name)
   }
 })
 
 watch(newService, 
   (newValue) => {
-    showError.value = (newValue.name.length < MIN_LENGTH_NAME || newValue.name.length > MAX_LENGTH_NAME) || !newValue.department_id
+    showError.value = (newValue.name?.length < MIN_LENGTH_NAME || newValue.name?.length > MAX_LENGTH_NAME) || !newValue.department_id
   },
   { deep: true }
 )

@@ -63,7 +63,7 @@ const rules = ref({
     {
       required: true,
       message: labels.validations.required,
-      trigger: ['input', 'blur', 'focus']
+      trigger: ['input', 'blur']
     },
     {
       min: 5,

@@ -143,6 +143,7 @@ const getServicesFromBE = async () => {
   try{
     loading.value = true
     services.value = await getServices()
+    serviceToBeUpdated.value = {}
   } catch (err) {
     console.error(err)
   } finally {
