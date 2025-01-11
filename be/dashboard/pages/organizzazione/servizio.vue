@@ -79,6 +79,13 @@ const columns = [
     }
   },
   {
+    title: labels.columns.updatedAt,
+    key: "updated_at",
+    render(row) {
+      return formatDate(row.updated_at)
+    }
+  },
+  {
     key: "actions",
     render(row) {
       return h(

@@ -23,7 +23,8 @@
     "name": "Nome",
     "department": "Direzione",
     "service": "Servizio",
-    "createdAt": "Creato il"
+    "createdAt": "Creato il",
+    "updatedAt": "Aggiornato il"
   },
   "actions": {
     "edit": "Modifica",
