@@ -55,3 +55,23 @@ export const createServiceValidationSchema = {
     },
   },
 }
+
+export const createOfficeValidationSchema = {
+  name: {
+    isLength: {
+      options: {
+        min: 5,
+        max: 150
+      },
+      errorMessage: "Il nome della direzione dev'essere di almeno 5 caratteri e massimo 150"
+    },
+    notEmpty: {
+      errorMessage: "Il nome non può essere vuoto"
+    },
+  },
+  department_id: {
+    notEmpty: {
+      errorMessage: "La direzione non può essere vuota"
+    },
+  },
+}

@@ -19,10 +19,21 @@
       "title": "Aggiorna servizio"
     }
   },
+  "office": {
+    "title": "Ufficio",
+    "create": {
+      "title": "Crea ufficio",
+      "label": "Crea nuovo ufficio"
+    },
+    "update": { 
+      "title": "Aggiorna ufficio"
+    }
+  },
   "columns": {
     "name": "Nome",
     "department": "Direzione",
     "service": "Servizio",
+    "office": "Ufficio",
     "createdAt": "Creato il",
     "updatedAt": "Aggiornato il"
   },

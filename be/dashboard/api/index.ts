@@ -14,6 +14,13 @@ import {
   deleteService
 } from './services'
 
+import {
+  getOffices,
+  getOffice,
+  updateOffice,
+  createOffice,
+  deleteOffice
+} from './offices'
 
 export {
   getDepartments,
@@ -25,5 +32,10 @@ export {
   getService,
   updateService,
   createService,
-  deleteService
+  deleteService,
+  getOffices,
+  getOffice,
+  updateOffice,
+  createOffice,
+  deleteOffice
 }

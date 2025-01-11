@@ -48,7 +48,8 @@ const serviceModalRef = ref()
 const columns = [
   {
     title: labels.columns.name,
-    key: "name"
+    key: "name",
+    sorter: (a, b) => a.name.localeCompare(b.name),
   },
   {
     title: labels.columns.department,
@@ -74,6 +75,7 @@ const columns = [
   {
     title: labels.columns.createdAt,
     key: "created_at",
+    sorter: (a, b) => new Date(a.created_at) - new Date(b.created_at),
     render(row) {
       return formatDate(row.created_at)
     }
