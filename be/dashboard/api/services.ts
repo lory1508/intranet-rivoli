@@ -15,6 +15,7 @@ const getService = async (id: string) => {
 const updateService = async (service: object) => {
   const id = service._id
   const body = { ...service }
+  delete body.department_info
   delete body._id
   const data = await $fetch(`${BE_PATH}/${COLLECTION}/${id}`, {
     method: 'PATCH',

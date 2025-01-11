@@ -89,6 +89,7 @@ router.patch(`/api/${COLLECTION}/:id`, async (req, res) => {
   const updates = {
     $set: { 
       ...req.body,
+      department_id: new BSON.ObjectId(req.body.department_id),
       updated_at: new Date()
     }
   };

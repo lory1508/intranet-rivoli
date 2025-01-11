@@ -104,6 +104,7 @@ const createOrUpdateService = async () => {
     if(isCreate.value) {
       const res = await createService(newService.value)
     } else {
+      newService.value.department_id = new mongoose.Types.ObjectId(newService.value.department_id)
       const res = await updateService(newService.value)
     }
     show.value = false
@@ -146,11 +147,7 @@ watch(show, async (newShowValue) => {
   } else {
     await getDepartmenstFromBE()
     if(props.service){
-      console.log(props.service)
-      newService.value = {
-        name: props.service.name,
-        department_id: props.service.department_id
-      }
+      newService.value = { ...props.service }
 
     } else {
       newService.value = {
