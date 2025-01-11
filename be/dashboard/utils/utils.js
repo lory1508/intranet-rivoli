@@ -1,5 +1,4 @@
 const formatDate = (date) => {
-  console.log(date)
   const formattedDate = new Date(date)
   return isDateValid(formattedDate) ? formattedDate.toLocaleString('it-IT') : "Mai modificato"
 }

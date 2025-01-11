@@ -6,11 +6,7 @@
 
       <NPopover trigger="hover">
         <template #trigger>
-          <NButton circle icon-placement="right" class="mt-2" color="#fb7185" size="small" @click="createService">
-            <template #icon>
-              <NIcon :component="Add" size="26" />
-            </template>
-          </NButton>
+          <ButtonAdd @click="createService" />
         </template>
         <span>{{ labels.service.create.label }}</span>
       </NPopover>
@@ -36,6 +32,7 @@ import labels from '@/utils/labels/it.json'
 
 // components
 import ServiceModal from '~/components/organizzazione/ServiceModal.vue'
+import ButtonAdd from '~/components/ButtonAdd.vue'
 import Loader from '~/components/Loader.vue'
 
 const services = ref([])

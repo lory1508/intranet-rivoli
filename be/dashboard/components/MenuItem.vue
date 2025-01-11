@@ -1,7 +1,7 @@
 <template>
   <NuxtLink 
     v-if="!hasChildren" 
-    class="flex flex-row items-center gap-2 px-2 py-1 -mx-2 transition-all duration-500 rounded-full hover:text-rose-950 hover:bg-rose-200" 
+    class="flex flex-row items-center gap-2 px-2 py-1 -mx-2 transition-all duration-500 rounded-full hover:text-white hover:bg-primary-200" 
     :to="menuItem.to"
   >
     <slot name="menuIcon" />
@@ -14,7 +14,7 @@
     <NCollapse arrow-placement="right" >
       <NCollapseItem name="menuItemslug" >
         <template #header>
-          <div class="flex flex-row items-center gap-2" :class="isActive ? 'border-b-2 border-b-rose-400 px-2 -mx-2': ''">
+          <div class="flex flex-row items-center gap-2" :class="isActive ? 'border-b-2 border-b-primary-400 px-2 -mx-2': ''">
             <slot name="menuIcon" />
             <span>
               {{menuItem.label}}
@@ -26,7 +26,7 @@
             v-for="child in menuItem?.children"
             :key="child.to"
             :to="child.to"
-            class="px-2 py-1 transition-all duration-500 rounded-full hover:text-rose-950 hover:bg-rose-200"
+            class="px-2 py-1 transition-all duration-500 rounded-full hover:text-white hover:bg-primary-200"
           >
             {{ child.label }}
           </NuxtLink>

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full min-h-screen gap-4 px-4 py-2 min-w-max bg-gradient-to-br from-indigo-50 to-indigo-200">
+  <div class="w-full h-full min-h-screen gap-4 px-4 py-2 min-w-max bg-gradient-to-br from-secondary-50 to-secondary-200">
     <!-- Navbar -->
     <div class="flex flex-row items-center justify-between w-full gap-2 px-4 py-2">
       <div class="flex flex-row items-center gap-4">
@@ -122,6 +122,6 @@ const menu = ref([
 
 <style>
 .router-link-active {
-  @apply bg-rose-400 rounded-full px-2 -mx-2 shadow font-semibold text-white
+  @apply bg-primary-400 rounded-full px-2 -mx-2 shadow font-semibold text-white
 }
 </style>
