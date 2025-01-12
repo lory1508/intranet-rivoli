@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full min-h-screen gap-4 px-4 py-2 min-w-max bg-gradient-to-br from-secondary-50 to-secondary-200">
+  <div class="flex flex-col w-full h-full min-h-screen px-4 py-2 text-white min-w-max bg-gradient-to-br from-primary-400 to-primary-700">
     <!-- Navbar -->
     <div class="flex flex-row items-center justify-between w-full gap-2 px-4 py-2">
       <div class="flex flex-row items-center gap-4">
@@ -18,10 +18,9 @@
         <div>Add Element</div>
       </div>
     </div>
-    <div class="flex flex-row w-full gap-2">
-
+    <div class="flex flex-row w-full h-full gap-2 grow">
       <!-- menu -->
-      <div class="flex flex-col gap-2 p-4 w-52">
+      <div class="flex flex-col gap-2 p-4 grow w-52">
         <MenuItem 
           v-for="(item, index) in menu" 
           :key="item.slug"
@@ -33,8 +32,10 @@
           </template>
         </MenuItem>
       </div>
-      <div class="w-full h-full p-4 bg-white shadow bg-opacity-70 rounded-2xl backdrop-blur-xl">
-        <NuxtPage />
+      <div class="flex w-full p-4 bg-white shadow-lg grow rounded-2xl backdrop-blur-xl">
+        <div class="w-full h-full">
+          <NuxtPage />
+        </div>
       </div>
     </div>
   </div>
@@ -122,6 +123,6 @@ const menu = ref([
 
 <style>
 .router-link-active {
-  @apply bg-primary-400 rounded-full px-2 -mx-2 shadow font-semibold text-white
+  @apply bg-primary-800 rounded-full px-2 -mx-2 shadow-lg font-semibold text-white
 }
 </style>
