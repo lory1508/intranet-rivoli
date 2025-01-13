@@ -23,9 +23,9 @@
 </template>
 
 <script setup>
-import { NH1, NTag, NIcon, NDataTable, NButton, NButtonGroup, NPopover, NPopconfirm } from 'naive-ui'
-import { Add } from '@vicons/ionicons5'
+import { NH1, NTag, NDataTable, NButton, NButtonGroup, NPopover, NPopconfirm } from 'naive-ui'
 import { ref, h } from 'vue'
+import { EMAIL_DOMAIN } from '@/utils/constants.ts'
 import { getUsers, deleteUser } from '~/api'
 import { formatDate } from '@/utils/utils'
 import labels from '@/utils/labels/it.json'
@@ -46,6 +46,16 @@ const columns = [
     title: labels.columns.name,
     key: "name",
     sorter: (a, b) => a.name.localeCompare(b.name),
+    render(row) {
+      return `${row.firstname} ${row.lastname}`
+    }
+  },
+  {
+    title: labels.columns.email,
+    key: "email",
+    render(row) {
+      return `${row.email}${EMAIL_DOMAIN}`
+    }
   },
   {
     title: labels.columns.department,
@@ -100,6 +110,26 @@ const columns = [
           default: () => "Nessun servizio associato"
         }
       )
+    }
+  },
+  {
+    title: labels.columns.office,
+    render(row) {
+      const offices = row.office_info.map((officeKey) => {
+        return h(
+          NTag,
+          {
+            style: {
+              marginRight: '6px'
+            },
+            type: 'warning',
+            bordered: false
+          },
+          {
+            default: () => officeKey.name
+          }
+        )
+      })
     }
   },
   {

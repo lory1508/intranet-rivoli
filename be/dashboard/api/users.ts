@@ -15,10 +15,15 @@ const getUser = async (id: string) => {
 const updateUser = async (user: object) => {
   const id = user._id
   const body = { ...user }
-  delete body.department_info
+
+  if(body?.department_info)
+    delete body.department_info
   if(body?.service_info)
     delete body.service_info
+  if(body?.office_info)
+    delete body.office_info
   delete body._id
+
   const data = await $fetch(`${BE_PATH}/${COLLECTION}/${id}`, {
     method: 'PATCH',
     body

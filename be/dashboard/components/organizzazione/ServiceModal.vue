@@ -46,7 +46,7 @@ import { NModal, NCard, NButton, NIcon, NInput, NForm, NFormItem, NSelect } from
 import { ref, computed, watch } from 'vue'
 import { Save } from '@vicons/ionicons5'
 import { createService, updateService, getDepartments } from '~/api';
-import { MIN_LENGTH_NAME, MAX_LENGTH_NAME } from '#build/imports';
+import { MIN_LENGTH_NAME, MAX_LENGTH_NAME } from '@/utils/constants';
 import labels from '@/utils/labels/it.json'
 import mongoose from "mongoose"
 

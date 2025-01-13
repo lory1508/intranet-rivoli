@@ -38,8 +38,8 @@ export const createUserValidationSchema = {
   phone:{},
   fax:{},
   email:{
-    isEmail: {
-      errorMessage: "Inserire una mail valida, ad esempio nome@provider.com"
+    notEmpty: {
+      errorMessage: "L'indirizzo email non può essere vuoto"
     }
   },
   room:{

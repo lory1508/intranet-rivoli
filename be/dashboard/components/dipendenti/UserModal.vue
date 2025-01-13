@@ -1,35 +1,120 @@
 <template>
   <NModal v-model:show="show">
     <NCard
-      style="width: 600px"
       :title="title"
       :bordered="false"
+      class="w-2/3 rounded-xl"
       size="huge"
       role="dialog"
       aria-modal="true"
     >
-      <NForm :model="newUser" :rules="rules">
-        <NFormItem path="name" :label="labels.columns.name">
-          <NInput :placeholder="labels.columns.name" v-model:value="newUser.name" :showCount="true" :maxlength="150" :minlength="5"/>
+      <NForm :model="newUser" :rules="rules" class="grid grid-cols-3 gap-2">
+        <div class="flex flex-row col-span-3 gap-32">
+          <NFormItem path="enabled" >
+            <span class="transition-all duration-100 cursor-pointer" :class="!newUser.enabled ? 'text-red-800 border-b-2 border-b-red-600 font-semibold' : ''" @click="newUser.enabled=false">{{ labels.form.disabled }}</span>
+            <NSwitch v-model:value="newUser.enabled" class="mx-2" />
+            <span class="transition-all duration-100 cursor-pointer" :class="newUser.enabled ? 'text-green-800 border-b-2 border-b-green-600 font-semibold' : ''" @click="newUser.enabled=true">{{labels.form.enabled}}</span>
+          </NFormItem>
+          <NFormItem path="admin">
+            <span class="transition-all duration-100 cursor-pointer" :class="!newUser.admin ? 'text-red-800 border-b-2 border-b-red-600 font-semibold' : ''" @click="newUser.admin=false">{{ labels.form.notadmin }}</span>
+            <NSwitch v-model:value="newUser.admin" class="mx-2"/>
+            <span class="transition-all duration-100 cursor-pointer" :class="newUser.admin ? 'text-green-800 border-b-2 border-b-green-600 font-semibold' : ''" @click="newUser.admin=true">{{labels.form.admin}}</span>
+          </NFormItem>
+        </div>
+        <NFormItem path="firstname" :label="labels.form.firstname">
+          <NInput :placeholder="labels.form.firstname" v-model:value="newUser.firstname" :showCount="true" :maxlength="MAX_LENGTH_NAME" :minlength="MIN_LENGTH_NAME"/>
         </NFormItem>
-        <NFormItem path="department" :label="labels.columns.department">
-          <NSelect
-            v-model:value="newUser.department_id"
-            filterable
-            round
-            :placeholder="labels.columns.department"
-            :options="departments"
-          />
+        <NFormItem path="lastname" :label="labels.form.lastname">
+          <NInput :placeholder="labels.form.lastname" v-model:value="newUser.lastname" :showCount="true" :maxlength="MAX_LENGTH_NAME" :minlength="MIN_LENGTH_NAME"/>
         </NFormItem>
-        <NFormItem path="service" :label="labels.columns.service">
-          <NSelect
-            v-model:value="newUser.service_id"
-            filterable
-            round
-            :placeholder="labels.columns.service"
-            :options="services"
-          />
+        <NFormItem path="username" :label="labels.form.username">
+          <NInput :placeholder="labels.form.username" v-model:value="newUser.username" :showCount="true" :maxlength="MAX_LENGTH_USERNAME" :minlength="MIN_LENGTH_USERNAME"/>
         </NFormItem>
+        <NFormItem path="phone" :label="labels.form.phone">
+          <NInputNumber class="w-full" :placeholder="labels.form.phone" v-model:value="newUser.phone" :min="MIN_INTERNO" :max="MAX_INTERNO" :show-button="false" :format="formatPhone">
+            <template #prefix>
+              <NIcon><Call /></NIcon>
+            </template>
+          </NInputNumber>
+        </NFormItem>
+        <NFormItem path="fax" :label="labels.form.fax">
+          <NInput :placeholder="labels.form.fax" v-model:value="newUser.fax" :maxlength="MAX_LENGTH_NAME" :minlength="MIN_LENGTH_NAME"/>
+        </NFormItem>
+        <NFormItem path="room" :label="labels.form.room">
+          <NInput :placeholder="labels.form.room" v-model:value="newUser.room" :showCount="true" :maxlength="MAX_LENGTH_NAME" :minlength="MIN_LENGTH_NAME">
+            <template #prefix>
+              <NIcon><Location /></NIcon>
+            </template>
+          </NInput>
+        </NFormItem>
+        <NFormItem path="email" :label="labels.form.email" class="col-span-2">
+          <NInputGroup>
+            <NInput :placeholder="labels.form.email" v-model:value="newUser.email" :maxlength="MAX_LENGTH_NAME" :minlength="MIN_LENGTH_NAME">
+              <template #prefix>
+                <NIcon><Mail /></NIcon>
+              </template>
+            </NInput>
+            <NInputGroupLabel>{{ EMAIL_DOMAIN }}</NInputGroupLabel>
+          </NInputGroup>
+        </NFormItem>
+        <NFormItem path="address" :label="labels.form.address">
+          <NInput :placeholder="labels.form.address" v-model:value="newUser.address" :showCount="true" :maxlength="MAX_LENGTH_NAME" :minlength="MIN_LENGTH_NAME">
+            <template #prefix>
+              <NIcon><MapSharp /></NIcon>
+            </template>
+          </NInput>
+        </NFormItem>
+        <div class="flex flex-row gap-2 col-span-full">
+          <NFormItem path="department" :label="labels.form.department" class="w-full">
+            <NSelect
+              v-model:value="newUser.department_id"
+              filterable
+              round
+              :placeholder="labels.form.department"
+              :options="departmentsOptions"
+            />
+          </NFormItem>
+          <NFormItem path="service" :label="labels.form.service" class="w-full">
+            <NSelect
+              v-model:value="newUser.service_id"
+              filterable
+              round
+              :placeholder="labels.form.service"
+              :options="servicesOptions"
+            />
+          </NFormItem>
+          <NFormItem path="office" :label="labels.form.office" class="w-full">
+            <NSelect
+              v-model:value="newUser.office_id"
+              filterable
+              round
+              :placeholder="labels.form.office"
+              :options="officesOptions"
+            />
+          </NFormItem>
+        </div>
+        <!-- Not implemented yet -->
+        <!-- <NFormItem path="photo" :label="labels.form.photo" class="col-span-full">
+          <NUpload
+            directory-dnd
+            :action="`${BE_PATH}/upload`"
+            accept=".png,.jpg,.jpeg"
+          >
+            <NUploadDragger>
+              <div style="margin-bottom: 12px">
+                <NIcon size="48" :depth="3">
+                  <Archive />
+                </NIcon>
+              </div>
+              <NText style="font-size: 16px">
+                {{labels.form.uploader.title}}
+              </NText>
+              <NP depth="3" style="margin: 8px 0 0 0">
+                {{labels.form.uploader.subtitle}}
+              </NP>
+            </NUploadDragger>
+          </NUpload>
+        </NFormItem> -->
       </NForm>
       <template #footer>
         <div class="flex flex-row gap-2">
@@ -51,33 +136,30 @@
 </template>
 
 <script setup>
-import { NModal, NCard, NButton, NIcon, NInput, NForm, NFormItem, NSelect } from 'naive-ui';
+import { NModal, NCard, NButton, NIcon, NInput, NForm, NFormItem, NSelect, NSwitch, NInputNumber, NInputGroup, NInputGroupLabel } from 'naive-ui';
 import { ref, computed, watch } from 'vue'
-import { Save } from '@vicons/ionicons5'
+import { Call, Location, Mail, MapSharp, Save } from '@vicons/ionicons5'
 import { createUser, updateUser, getDepartments, getServices, getOffices } from '~/api';
-import { MIN_LENGTH_NAME, MAX_LENGTH_NAME } from '#build/imports';
+import { MIN_LENGTH_NAME, MAX_LENGTH_NAME, MIN_LENGTH_USERNAME, MAX_LENGTH_USERNAME, MIN_INTERNO, MAX_INTERNO, EMAIL_DOMAIN } from '@/utils/constants';
 import labels from '@/utils/labels/it.json'
 import mongoose from "mongoose"
 
 const props = defineProps({
   user: {
-    type: Object,
-    default: {
-      firstname: "",
-      lastname: "",
-      phone: "",
-      fax: "",
-      email: "",
-      room: "",
-      department_id: "",
-      service_id: "",
-      office_id: "",
-      address: "",
-      photo: "",
-      enabled: "",
-      admin: "",
-      username: "",
-    }
+    firstname: "",
+    lastname: "",
+    phone: "",
+    fax: "",
+    email: "",
+    room: "",
+    department_id: "",
+    service_id: "",
+    office_id: "",
+    address: "",
+    photo: "",
+    enabled: true,
+    admin: "",
+    username: "",
   }
 })
 const emit = defineEmits(['close'])
@@ -87,11 +169,13 @@ const showError = ref(true)
 const loading = ref(false)
 
 const departments = ref([])
+const departmentsOptions = ref([])
 const services = ref([])
+const servicesOptions = ref([])
 const offices = ref([])
+const officesOptions = ref([])
 
-const isCreate = ref(false)
-const newUser = ref({
+const defaultUser = {
   firstname: "",
   lastname: "",
   phone: "",
@@ -103,28 +187,80 @@ const newUser = ref({
   office_id: "",
   address: "",
   photo: "",
-  enabled: "",
+  enabled: true,
   admin: "",
   username: "",
-})
+}
+
+const isCreate = ref(false)
+const newUser = ref({...defaultUser})
 
 const rules = ref({
-  name: [
+  firstname: [
     {
       required: true,
       message: labels.validations.required,
       trigger: ['input', 'blur']
     },
     {
-      min: 5,
+      min: MIN_LENGTH_NAME,
+      message: labels.validations.min2,
+      trigger: ["input", "blur"]
+    },
+    {
+      max: MAX_LENGTH_NAME,
+      message: labels.validations.max150,
+      trigger: ["input", "blur"]
+    },
+  ],
+  lastname: [
+    {
+      required: true,
+      message: labels.validations.required,
+      trigger: ['input', 'blur']
+    },
+    {
+      min: MIN_LENGTH_NAME,
+      message: labels.validations.min2,
+      trigger: ["input", "blur"]
+    },
+    {
+      max: MAX_LENGTH_NAME,
+      message: labels.validations.max150,
+      trigger: ["input", "blur"]
+    },
+  ],
+  username: [
+    {
+      required: true,
+      message: labels.validations.required,
+      trigger: ['input', 'blur']
+    },
+    {
+      min: MIN_LENGTH_USERNAME,
       message: labels.validations.min5,
       trigger: ["input", "blur"]
     },
     {
-      max: 150,
+      max: MAX_LENGTH_USERNAME,
       message: labels.validations.max150,
       trigger: ["input", "blur"]
     },
+  ],
+  phone: [],
+  room: [
+    {
+      required: true,
+      message: labels.validations.required,
+      trigger: ['input', 'blur']
+    }
+  ],
+  email: [
+    {
+      required: true,
+      message: labels.validations.required,
+      trigger: ['input', 'blur']
+    }
   ],
   department_id: [
     {
@@ -138,15 +274,18 @@ const rules = ref({
 const createOrUpdateUser = async () => {
   try{
     loading.value = true
-    if(isCreate.value) {
-      if(newUser.value.service_id)
-        newUser.value.service_id = new mongoose.Types.ObjectId(newUser.value.service_id)
-      const res = await createUser(newUser.value)
-    } else {
+
+    if(newUser.value.department_id )
       newUser.value.department_id = new mongoose.Types.ObjectId(newUser.value.department_id)
       if(newUser.value.service_id)
-        newUser.value.service_id = new mongoose.Types.ObjectId(newUser.value.service_id)
-      const res = await updateUser(newUser.value)
+      newUser.value.service_id = new mongoose.Types.ObjectId(newUser.value.service_id)
+      if(newUser.value.office_id)
+        newUser.value.office_id = new mongoose.Types.ObjectId(newUser.value.office_id)
+
+    if(isCreate.value) {
+      await createUser(newUser.value)
+    } else {
+      await updateUser(newUser.value)
     }
     show.value = false
   } catch (err) {
@@ -166,8 +305,8 @@ const title = computed(() => {
 
 const getDepartmenstFromBE = async () => {
   try {
-    const data = await getDepartments()
-    departments.value = data.map((dep) => {
+    departments.value = await getDepartments()
+    departmentsOptions.value = departments.value.map((dep) => {
       return {
         value: dep._id,
         label: dep.name
@@ -180,16 +319,22 @@ const getDepartmenstFromBE = async () => {
 
 const getServicesFromBE = async (department = "") => {
   try {
-    let data = await getServices()
-    if(department){
-      data = data.filter((dep) => dep.department_id === department)
+    if(!department){
+      services.value =  await getServices()
+      servicesOptions.value = services.value.map((dep) => {
+        return {
+          value: dep._id,
+          label: dep.name
+        }
+      })
+    } else {
+      servicesOptions.value = services.value.filter((ser) => ser.department_id === department).map((dep) => {
+        return {
+          value: dep._id,
+          label: dep.name
+        }
+      })
     }
-    services.value = data.map((dep) => {
-      return {
-        value: dep._id,
-        label: dep.name
-      }
-    })
   } catch (error) {
     console.error(error)
   }
@@ -197,65 +342,64 @@ const getServicesFromBE = async (department = "") => {
 
 const getOfficesFromBE = async (department = "", service = "") => {
   try {
-    let data = await getOffices()
-    if(department){
-      data = data.filter((dep) => dep.department_id === department)
+    if(!department && !service){
+      offices.value =  await getOffices()
+      officesOptions.value = offices.value.map((office) => {
+        return {
+          value: office._id,
+          label: office.name
+        }
+      })
+    } else if(department && !service) {
+      officesOptions.value = offices.value.filter((off) => off.department_id === department).map((office) => {
+        return {
+          value: office._id,
+          label: office.name
+        }
+      })
+    } else {
+      officesOptions.value = offices.value.filter((off) => off.service_id === service).map((office) => {
+        return {
+          value: office._id,
+          label: office.name
+        }
+      })
     }
-    if(service){
-      data = data.filter((ser) => ser.service_id === service)
-    }
-    offices.value = data.map((office) => {
-      return {
-        value: office._id,
-        label: office.name
-      }
-    })
   } catch (error) {
     console.error(error)
   }
 }
 
+const uploadingPhoto = async (data) => {
+  console.log(data)
+  if (data.file.file?.type !== "image/png") {
+    message.error(
+      "Only upload picture files in png format, please re-upload."
+    );
+    return false;
+  }
+  return true;
+}
+
+
+const formatPhone = (value) => {
+  if (value === null)
+    return ''
+  return `${String(value).padStart(4, '0')}`
+}
+
 watch(show, async (newShowValue) => {
   if(!newShowValue){
-    newUser.value={
-      firstname: "",
-      lastname: "",
-      phone: "",
-      fax: "",
-      email: "",
-      room: "",
-      department_id: "",
-      service_id: "",
-      office_id: "",
-      address: "",
-      photo: "",
-      enabled: "",
-      admin: "",
-      username: "",
-    }
+    newUser.value={...defaultUser}
     emit('close')
   } else {
     await getDepartmenstFromBE()
     await getServicesFromBE()
+    await getOfficesFromBE()
     if(props.user){
       newUser.value = { ...props.user }
     } else {
-      newUser.value = {
-        firstname: "",
-        lastname: "",
-        phone: "",
-        fax: "",
-        email: "",
-        room: "",
-        department_id: "",
-        service_id: "",
-        office_id: "",
-        address: "",
-        photo: "",
-        enabled: "",
-        admin: "",
-        username: "",
-      }
+      newUser.value = {...defaultUser}
     }
     isCreate.value = !Boolean(props.user?.name)
   }
@@ -263,7 +407,11 @@ watch(show, async (newShowValue) => {
 
 watch(newUser, 
   (newValue) => {
-    showError.value = (newValue.name?.length < MIN_LENGTH_NAME || newValue.name?.length > MAX_LENGTH_NAME) || !newValue.department_id
+    showError.value = (newValue.name?.length < MIN_LENGTH_USERNAME || newValue.name?.length > MAX_LENGTH_USERNAME) || !newValue.department_id
+
+    if(newValue.firstname && newValue.lastname){
+      newUser.value.username = `${newValue.firstname.toLowerCase()}.${newValue.lastname.toLowerCase()}`
+    }
 
     if(newValue.department_id){
       getServicesFromBE(newValue.department_id)

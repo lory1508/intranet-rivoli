@@ -67,7 +67,6 @@ router.post(
 
     let collection = await db.collection(COLLECTION);
     const newDocument = matchedData(req)
-    console.log(newDocument)
     newDocument.department_id = new BSON.ObjectId(newDocument.department_id)
 
     if(newDocument?.service_id)

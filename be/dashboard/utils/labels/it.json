@@ -46,7 +46,15 @@
     "office": "Ufficio",
     "user": "Dipendente",
     "createdAt": "Creato il",
-    "updatedAt": "Aggiornato il"
+    "updatedAt": "Aggiornato il",
+    "username": "Nome utente",
+    "firstname": "Nome",
+    "lastname": "Cognome",
+    "phone": "Interno",
+    "fax": "Fax",
+    "email": "Email",
+    "room": "Stanza",
+    "address": "Indirizzo"
   },
   "actions": {
     "edit": "Modifica",
@@ -61,6 +69,29 @@
   "validations": {
     "required": "questo campo è obbligatorio",
     "min5": "questo campo deve essere di almeno 5 caratteri",
+    "min2": "questo campo deve essere di almeno 2 caratteri",
     "max150": "questo campo deve essere al massimo di 150 caratteri"
+  },
+  "form": {
+    "username": "Nome utente",
+    "firstname": "Nome",
+    "lastname": "Cognome",
+    "phone": "Interno",
+    "fax": "Fax",
+    "email": "Email",
+    "room": "Stanza",
+    "department": "Direzione",
+    "service": "Servizio",
+    "office": "Ufficio",
+    "address": "Indirizzo",
+    "photo": "Foto",
+    "enabled": "Visibile",
+    "disabled": "Non visibile",
+    "admin": "Abilitato alle modifiche",
+    "notadmin": "Non abilitato alle modifiche",
+    "uploader": {
+      "title": "Clicca o trascina un file in quest'area per caricarlo",
+      "subtitle": "Sono ammessi file .png .jpg o .jpeg"
+    }
   }
 }
