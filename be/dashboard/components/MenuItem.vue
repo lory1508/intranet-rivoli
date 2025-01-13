@@ -1,7 +1,7 @@
 <template>
   <NuxtLink 
     v-if="!hasChildren" 
-    class="flex flex-row items-center gap-2 px-2 py-1 -mx-2 transition-all duration-500 rounded-full hover:text-white hover:bg-primary-700" 
+    class="flex flex-row items-center gap-2 px-2 py-1 -mx-2 transition-all duration-200 rounded-full hover:scale-110 hover:shadow-lg hover:text-white hover:bg-primary-700" 
     :to="menuItem.to"
   >
     <slot name="menuIcon" />
@@ -26,11 +26,11 @@
             v-for="child in menuItem?.children"
             :key="child.to"
             :to="child.to"
-            class="px-2 py-1 text-white transition-all duration-500 rounded-full hover:text-white hover:bg-primary-700"
+            class="px-2 py-1 text-white transition-all duration-500 rounded-full hover:text-white hover:scale-110 hover:shadow-lg hover:bg-primary-700"
           >
             {{ child.label }}
           </NuxtLink>
-          <div class="w-full py-1 border-b border-stone-500"></div>
+          <div class="w-full py-1 border-b border-white"></div>
         </div>
       </NCollapseItem>
     </NCollapse>
@@ -72,5 +72,9 @@ onMounted(() => {
 .n-base-icon {
   color: white !important;
   fill: white !important;
+}
+
+.router-link-active {
+  @apply bg-primary-300 rounded-full px-2 -mx-2 shadow-lg font-semibold text-white
 }
 </style>

@@ -6,11 +6,7 @@
 
       <NPopover trigger="hover">
         <template #trigger>
-          <NButton circle icon-placement="right" class="mt-2" color="#fb7185" size="small" @click="createDepartment">
-            <template #icon>
-              <NIcon :component="Add" size="26" />
-            </template>
-          </NButton>
+          <ButtonAdd @click="createService" />
         </template>
         <span>{{ labels.department.create.label }}</span>
       </NPopover>

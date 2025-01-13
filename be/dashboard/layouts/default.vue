@@ -120,9 +120,3 @@ const menu = ref([
   },
 ])
 </script>
-
-<style>
-.router-link-active {
-  @apply bg-primary-800 rounded-full px-2 -mx-2 shadow-lg font-semibold text-white
-}
-</style>
