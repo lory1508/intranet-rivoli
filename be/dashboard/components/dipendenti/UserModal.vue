@@ -8,6 +8,7 @@
       role="dialog"
       aria-modal="true"
     >
+    <pre>{{isCreate }}</pre>
       <NForm :model="newUser" :rules="rules" class="grid grid-cols-3 gap-2">
         <div class="flex flex-row col-span-3 gap-32">
           <NFormItem path="enabled" >
@@ -297,7 +298,7 @@ const createOrUpdateUser = async () => {
 }
 
 const title = computed(() => {
-  if(props.user.name)
+  if(!isCreate.value)
     return labels.user.update.title
   else
     return labels.user.create.title
@@ -401,7 +402,7 @@ watch(show, async (newShowValue) => {
     } else {
       newUser.value = {...defaultUser}
     }
-    isCreate.value = !Boolean(props.user?.name)
+    isCreate.value = !Boolean(props.user?.email)
   }
 })
 

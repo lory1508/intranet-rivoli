@@ -110,6 +110,7 @@ router.patch(`/api/${COLLECTION}/:id`, async (req, res) => {
 
   let manipulatedBody = { ...req.body }
   manipulatedBody.department_id = new BSON.ObjectId(req.body.department_id)
+  manipulatedBody.office_id = new BSON.ObjectId(req.body.office_id)
   if(manipulatedBody?.service_id)
     manipulatedBody.service_id = new BSON.ObjectId(req.body.service_id)
   manipulatedBody.updated_at = new Date()

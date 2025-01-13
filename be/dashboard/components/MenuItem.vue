@@ -1,7 +1,7 @@
 <template>
   <NuxtLink 
     v-if="!hasChildren" 
-    class="flex flex-row items-center gap-2 px-2 py-1 -mx-2 transition-all duration-200 rounded-full hover:scale-110 hover:shadow-lg hover:text-white hover:bg-primary-700" 
+    class="z-50 flex flex-row items-center gap-2 px-2 py-1 -mx-2 transition-all duration-200 rounded-full hover:scale-110 hover:shadow-lg hover:text-white hover:bg-primary-700" 
     :to="menuItem.to"
   >
     <slot name="menuIcon" />

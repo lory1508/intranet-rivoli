@@ -59,6 +59,10 @@ const columns = [
     }
   },
   {
+    title: labels.columns.phone,
+    key: "phone",
+  },
+  {
     title: labels.columns.department,
     render(row) {
       const deps = row.department_info.map((depKey) => {
@@ -116,8 +120,7 @@ const columns = [
   {
     title: labels.columns.office,
     render(row) {
-      const offices = row.office_info.map((officeKey) => {
-        console.log(officeKey)
+      const offs = row.office_info.map((offKey) => {
         return h(
           NTag,
           {
@@ -128,10 +131,11 @@ const columns = [
             bordered: false
           },
           {
-            default: () => officeKey.name
+            default: () => offKey.name
           }
         )
       })
+      return offs
     }
   },
   {
