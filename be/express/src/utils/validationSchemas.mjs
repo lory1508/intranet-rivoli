@@ -3,22 +3,66 @@ export const createUserValidationSchema = {
     isLength: {
       options: {
         min: 5,
-        max: 32
+        max: 150
       },
-      errorMessage: "Username must be at least 5 characters and max 32 characters"
+      errorMessage: "Il nome utente dev'essere di minimo 5 caratteri e massimo 150"
     },
     notEmpty: {
-      errorMessage: "Username cannot be empty"
+      errorMessage: "Il nome utente non può essere vuoto"
     },
-    isString: {
-      errorMessage: "Username must be a string"
+  },
+  firstname:{
+    isLength: {
+      options: {
+        min: 2,
+        max: 150
+      },
+      errorMessage: "Il nome dev'essere di minimo 2 caratteri e massimo 150"
+    },
+    notEmpty: {
+      errorMessage: "Il nome non può essere vuoto"
+    },
+  },
+  lastname:{
+    isLength: {
+      options: {
+        min: 2,
+        max: 150
+      },
+      errorMessage: "Il nome utente dev'essere di minimo 2 caratteri e massimo 150"
+    },
+    notEmpty: {
+      errorMessage: "Il nome utente non può essere vuoto"
+    },
+  },
+  phone:{},
+  fax:{},
+  email:{
+    isEmail: {
+      errorMessage: "Inserire una mail valida, ad esempio nome@provider.com"
     }
   },
-  displayName: {
+  room:{
     notEmpty: {
-      errorMessage: "displayName cannot be empty"
-    }
-  }
+      errorMessage: "La stanza non può essere vuota"
+    },
+  },
+  department_id:{
+    notEmpty: {
+      errorMessage: "La direzione non può essere vuota"
+    },},
+  service_id:{
+    notEmpty: {
+      errorMessage: "Il servizio non può essere vuoto"
+    },},
+  office_id:{
+    notEmpty: {
+      errorMessage: "L'ufficio non può essere vuoto"
+    },},
+  address:{},
+  photo:{},
+  enabled:{},
+  admin:{},
 }
 
 export const createDepartmentValidationSchema = {

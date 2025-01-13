@@ -22,6 +22,14 @@ import {
   deleteOffice
 } from './offices'
 
+import {
+  getUsers,
+  getUser,
+  updateUser,
+  createUser,
+  deleteUser
+} from './users'
+
 export {
   getDepartments,
   getDepartment,
@@ -37,5 +45,10 @@ export {
   getOffice,
   updateOffice,
   createOffice,
-  deleteOffice
+  deleteOffice,
+  getUsers,
+  getUser,
+  updateUser,
+  createUser,
+  deleteUser
 }

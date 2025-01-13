@@ -29,11 +29,22 @@
       "title": "Aggiorna ufficio"
     }
   },
+  "user": {
+    "title": "Dipendente",
+    "create": {
+      "title": "Crea dipendente",
+      "label": "Crea nuovo dipendente"
+    },
+    "update": { 
+      "title": "Aggiorna dipendente"
+    }
+  },
   "columns": {
     "name": "Nome",
     "department": "Direzione",
     "service": "Servizio",
     "office": "Ufficio",
+    "user": "Dipendente",
     "createdAt": "Creato il",
     "updatedAt": "Aggiornato il"
   },

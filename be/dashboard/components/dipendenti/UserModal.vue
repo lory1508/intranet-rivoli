@@ -8,15 +8,14 @@
       role="dialog"
       aria-modal="true"
     >
-      <NForm :model="newOffice" :rules="rules">
+      <NForm :model="newUser" :rules="rules">
         <NFormItem path="name" :label="labels.columns.name">
-          <NInput :placeholder="labels.columns.name" v-model:value="newOffice.name" :showCount="true" :maxlength="150" :minlength="5"/>
+          <NInput :placeholder="labels.columns.name" v-model:value="newUser.name" :showCount="true" :maxlength="150" :minlength="5"/>
         </NFormItem>
         <NFormItem path="department" :label="labels.columns.department">
           <NSelect
-            v-model:value="newOffice.department_id"
+            v-model:value="newUser.department_id"
             filterable
-            clearable
             round
             :placeholder="labels.columns.department"
             :options="departments"
@@ -24,11 +23,11 @@
         </NFormItem>
         <NFormItem path="service" :label="labels.columns.service">
           <NSelect
-            v-model:value="newOffice.service_id"
+            v-model:value="newUser.service_id"
             filterable
             round
             :placeholder="labels.columns.service"
-            :options="servicesOptions"
+            :options="services"
           />
         </NFormItem>
       </NForm>
@@ -37,7 +36,7 @@
           <NButton round secondary type="error" @click="show=false">
             {{labels.actions.cancel}}
           </NButton>
-          <NButton round secondary type="success" :disabled="showError" @click="createOrUpdateOffice">
+          <NButton round secondary type="success" :disabled="showError" @click="createOrUpdateUser">
             <template #icon>
               <NIcon>
                 <Save />
@@ -55,18 +54,29 @@
 import { NModal, NCard, NButton, NIcon, NInput, NForm, NFormItem, NSelect } from 'naive-ui';
 import { ref, computed, watch } from 'vue'
 import { Save } from '@vicons/ionicons5'
-import { createOffice, updateOffice, getDepartments, getServices } from '~/api';
+import { createUser, updateUser, getDepartments, getServices, getOffices } from '~/api';
 import { MIN_LENGTH_NAME, MAX_LENGTH_NAME } from '#build/imports';
 import labels from '@/utils/labels/it.json'
 import mongoose from "mongoose"
 
 const props = defineProps({
-  office: {
+  user: {
     type: Object,
     default: {
-      name: "",
+      firstname: "",
+      lastname: "",
+      phone: "",
+      fax: "",
+      email: "",
+      room: "",
       department_id: "",
-      service_id: ""
+      service_id: "",
+      office_id: "",
+      address: "",
+      photo: "",
+      enabled: "",
+      admin: "",
+      username: "",
     }
   }
 })
@@ -77,16 +87,25 @@ const showError = ref(true)
 const loading = ref(false)
 
 const departments = ref([])
-const departmentsOptions = ref([])
-const selectedDepartment = ref()
 const services = ref([])
-const servicesOptions = ref([])
+const offices = ref([])
 
 const isCreate = ref(false)
-const newOffice = ref({
-  name: "",
+const newUser = ref({
+  firstname: "",
+  lastname: "",
+  phone: "",
+  fax: "",
+  email: "",
+  room: "",
   department_id: "",
-  service_id: ""
+  service_id: "",
+  office_id: "",
+  address: "",
+  photo: "",
+  enabled: "",
+  admin: "",
+  username: "",
 })
 
 const rules = ref({
@@ -116,18 +135,18 @@ const rules = ref({
   ]
 })
 
-const createOrUpdateOffice = async () => {
+const createOrUpdateUser = async () => {
   try{
     loading.value = true
     if(isCreate.value) {
-      if(newOffice.value.service_id)
-        newOffice.value.service_id = new mongoose.Types.ObjectId(newOffice.value.service_id)
-      const res = await createOffice(newOffice.value)
+      if(newUser.value.service_id)
+        newUser.value.service_id = new mongoose.Types.ObjectId(newUser.value.service_id)
+      const res = await createUser(newUser.value)
     } else {
-      newOffice.value.department_id = new mongoose.Types.ObjectId(newOffice.value.department_id)
-      if(newOffice.value.service_id)
-        newOffice.value.service_id = new mongoose.Types.ObjectId(newOffice.value.service_id)
-      const res = await updateOffice(newOffice.value)
+      newUser.value.department_id = new mongoose.Types.ObjectId(newUser.value.department_id)
+      if(newUser.value.service_id)
+        newUser.value.service_id = new mongoose.Types.ObjectId(newUser.value.service_id)
+      const res = await updateUser(newUser.value)
     }
     show.value = false
   } catch (err) {
@@ -139,10 +158,10 @@ const createOrUpdateOffice = async () => {
 }
 
 const title = computed(() => {
-  if(props.office.name)
-    return labels.office.update.title
+  if(props.user.name)
+    return labels.user.update.title
   else
-    return labels.office.create.title
+    return labels.user.create.title
 })
 
 const getDepartmenstFromBE = async () => {
@@ -161,22 +180,36 @@ const getDepartmenstFromBE = async () => {
 
 const getServicesFromBE = async (department = "") => {
   try {
-    if(!department){
-      services.value =  await getServices()
-      servicesOptions.value = services.value.map((dep) => {
-        return {
-          value: dep._id,
-          label: dep.name
-        }
-      })
-    } else {
-      servicesOptions.value = services.value.filter((ser) => ser.department_id === department).map((dep) => {
-        return {
-          value: dep._id,
-          label: dep.name
-        }
-      })
+    let data = await getServices()
+    if(department){
+      data = data.filter((dep) => dep.department_id === department)
     }
+    services.value = data.map((dep) => {
+      return {
+        value: dep._id,
+        label: dep.name
+      }
+    })
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const getOfficesFromBE = async (department = "", service = "") => {
+  try {
+    let data = await getOffices()
+    if(department){
+      data = data.filter((dep) => dep.department_id === department)
+    }
+    if(service){
+      data = data.filter((ser) => ser.service_id === service)
+    }
+    offices.value = data.map((office) => {
+      return {
+        value: office._id,
+        label: office.name
+      }
+    })
   } catch (error) {
     console.error(error)
   }
@@ -184,37 +217,56 @@ const getServicesFromBE = async (department = "") => {
 
 watch(show, async (newShowValue) => {
   if(!newShowValue){
-    newOffice.value={
-      name: "",
+    newUser.value={
+      firstname: "",
+      lastname: "",
+      phone: "",
+      fax: "",
+      email: "",
+      room: "",
       department_id: "",
-      service_id: ""
+      service_id: "",
+      office_id: "",
+      address: "",
+      photo: "",
+      enabled: "",
+      admin: "",
+      username: "",
     }
     emit('close')
   } else {
     await getDepartmenstFromBE()
     await getServicesFromBE()
-    if(props.office){
-      newOffice.value = { ...props.office }
+    if(props.user){
+      newUser.value = { ...props.user }
     } else {
-      newOffice.value = {
-        name: "",
+      newUser.value = {
+        firstname: "",
+        lastname: "",
+        phone: "",
+        fax: "",
+        email: "",
+        room: "",
         department_id: "",
-        service_id: ""
+        service_id: "",
+        office_id: "",
+        address: "",
+        photo: "",
+        enabled: "",
+        admin: "",
+        username: "",
       }
     }
-    isCreate.value = !Boolean(props.office?.name)
+    isCreate.value = !Boolean(props.user?.name)
   }
 })
 
-watch(newOffice, 
+watch(newUser, 
   (newValue) => {
-    if(show.value){
-      showError.value = (newValue.name?.length < MIN_LENGTH_NAME || newValue.name?.length > MAX_LENGTH_NAME) || !newValue.department_id
+    showError.value = (newValue.name?.length < MIN_LENGTH_NAME || newValue.name?.length > MAX_LENGTH_NAME) || !newValue.department_id
 
-      if(newValue.department_id != selectedDepartment.value){
-        getServicesFromBE(newValue.department_id)
-        selectedDepartment.value = newValue.department_id
-      }
+    if(newValue.department_id){
+      getServicesFromBE(newValue.department_id)
     }
   },
   { deep: true }
