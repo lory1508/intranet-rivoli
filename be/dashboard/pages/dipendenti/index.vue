@@ -17,6 +17,7 @@
       :data="users"
       :pagination="pagination"
       :bordered="false"
+      class="w-full"
     />
   </div>
   <UserModal ref="userModalRef" :user="userToBeUpdated" @close="getUsersFromBE" />
@@ -116,6 +117,7 @@ const columns = [
     title: labels.columns.office,
     render(row) {
       const offices = row.office_info.map((officeKey) => {
+        console.log(officeKey)
         return h(
           NTag,
           {

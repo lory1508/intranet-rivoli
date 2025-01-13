@@ -34,6 +34,14 @@ router.get(
           foreignField: "_id",
           as: "service_info"
         }
+      },
+      {
+        $lookup: {
+          from: 'offices',
+          localField: "office_id",
+          foreignField: "_id",
+          as: "office_info"
+        }
       }
     ]).toArray()
     
@@ -68,6 +76,7 @@ router.post(
     let collection = await db.collection(COLLECTION);
     const newDocument = matchedData(req)
     newDocument.department_id = new BSON.ObjectId(newDocument.department_id)
+    newDocument.office_id = new BSON.ObjectId(newDocument.office_id)
 
     if(newDocument?.service_id)
       newDocument.service_id = new BSON.ObjectId(newDocument.service_id)
