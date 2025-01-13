@@ -26,6 +26,14 @@ router.get(
           foreignField: "_id",
           as: "department_info"
         }
+      },
+      {
+        $lookup: {
+          from: 'services',
+          localField: "service_id",
+          foreignField: "_id",
+          as: "service_info"
+        }
       }
     ]).toArray()
     
@@ -59,7 +67,12 @@ router.post(
 
     let collection = await db.collection(COLLECTION);
     const newDocument = matchedData(req)
+    console.log(newDocument)
     newDocument.department_id = new BSON.ObjectId(newDocument.department_id)
+
+    if(newDocument?.service_id)
+      newDocument.service_id = new BSON.ObjectId(newDocument.service_id)
+
     newDocument.created_at = new Date();
     let result = await collection.insertOne(newDocument);
     return res.send(result).status(204);
@@ -86,11 +99,16 @@ router.get(`/api/${COLLECTION}/:id`, async (req, res) => {
  */
 router.patch(`/api/${COLLECTION}/:id`, async (req, res) => {
   const query = { _id: new BSON.ObjectId(req.params) };
+
+  let manipulatedBody = { ...req.body }
+  manipulatedBody.department_id = new BSON.ObjectId(req.body.department_id)
+  if(manipulatedBody?.service_id)
+    manipulatedBody.service_id = new BSON.ObjectId(req.body.service_id)
+  manipulatedBody.updated_at = new Date()
+
   const updates = {
     $set: { 
-      ...req.body,
-      department_id: new BSON.ObjectId(req.body.department_id),
-      updated_at: new Date()
+      ...manipulatedBody,
     }
   };
   let collection = await db.collection(COLLECTION);

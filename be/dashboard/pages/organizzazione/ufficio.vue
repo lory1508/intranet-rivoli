@@ -6,7 +6,7 @@
 
       <NPopover trigger="hover">
         <template #trigger>
-          <ButtonAdd @click="createService" />
+          <ButtonAdd @click="createOffice" />
         </template>
         <span>{{ labels.office.create.label }}</span>
       </NPopover>
@@ -35,7 +35,7 @@ import OfficeModal from '~/components/organizzazione/OfficeModal.vue'
 import Loader from '~/components/Loader.vue'
 
 const offices = ref([])
-const pagination = ref(false)
+const pagination = ref(true)
 const loading = ref(true)
 const officeToBeUpdated = ref()
 
@@ -66,6 +66,40 @@ const columns = [
         )
       })
       return deps
+    }
+  },
+  {
+    title: labels.columns.service,
+    render(row) {
+      const services = row.service_info.map((serKey) => {
+        return h(
+          NTag,
+          {
+            style: {
+              marginRight: '6px'
+            },
+            type: 'success',
+            bordered: false
+          },
+          {
+            default: () => serKey.name
+          }
+        )
+      })
+      
+      return services.length ? services : h(NTag,
+        {
+          style: {
+            marginRight: '6px',
+            fontStyle: 'italic'
+          },
+          type: 'success',
+          bordered: false
+        },
+        {
+          default: () => "Nessun servizio associato"
+        }
+      )
     }
   },
   {

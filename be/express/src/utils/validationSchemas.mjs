@@ -74,4 +74,5 @@ export const createOfficeValidationSchema = {
       errorMessage: "La direzione non può essere vuota"
     },
   },
+  service_id: {},
 }

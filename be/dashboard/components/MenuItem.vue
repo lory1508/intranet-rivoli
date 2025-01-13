@@ -69,7 +69,7 @@ onMounted(() => {
 </script>
 
 <style>
-.n-base-icon {
+.n-collapse-item-arrow .n-base-icon {
   color: white !important;
   fill: white !important;
 }

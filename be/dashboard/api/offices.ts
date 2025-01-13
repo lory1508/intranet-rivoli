@@ -16,6 +16,8 @@ const updateOffice = async (office: object) => {
   const id = office._id
   const body = { ...office }
   delete body.department_info
+  if(body?.service_info)
+    delete body.service_info
   delete body._id
   const data = await $fetch(`${BE_PATH}/${COLLECTION}/${id}`, {
     method: 'PATCH',

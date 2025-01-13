@@ -6,7 +6,7 @@
 
       <NPopover trigger="hover">
         <template #trigger>
-          <ButtonAdd @click="createService" />
+          <ButtonAdd @click="createDepartment" />
         </template>
         <span>{{ labels.department.create.label }}</span>
       </NPopover>
