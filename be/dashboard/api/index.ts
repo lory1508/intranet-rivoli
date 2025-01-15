@@ -34,6 +34,10 @@ import {
   getSearch
 } from './search'
 
+import {
+  uploadImage
+} from './upload'
+
 export {
   getDepartments,
   getDepartment,
@@ -55,5 +59,6 @@ export {
   updateUser,
   createUser,
   deleteUser,
-  getSearch
+  getSearch,
+  uploadImage
 }

@@ -94,10 +94,11 @@
           </NFormItem>
         </div>
         <!-- Not implemented yet -->
-        <!-- <NFormItem path="photo" :label="labels.form.photo" class="col-span-full">
+        <NFormItem path="photo" :label="labels.form.photo" class="col-span-full">
           <NUpload
             directory-dnd
             :action="`${BE_PATH}/upload`"
+            :custom-request="uploadPhoto"
             accept=".png,.jpg,.jpeg"
           >
             <NUploadDragger>
@@ -114,7 +115,7 @@
               </NP>
             </NUploadDragger>
           </NUpload>
-        </NFormItem> -->
+        </NFormItem>
       </NForm>
       <template #footer>
         <div class="flex flex-row gap-2">
@@ -136,10 +137,10 @@
 </template>
 
 <script setup>
-import { useMessage, NModal, NCard, NButton, NIcon, NInput, NForm, NFormItem, NSelect, NSwitch, NInputNumber, NInputGroup, NInputGroupLabel } from 'naive-ui';
+import { useMessage, NUpload, NUploadDragger, NText, NP, NModal, NCard, NButton, NIcon, NInput, NForm, NFormItem, NSelect, NSwitch, NInputNumber, NInputGroup, NInputGroupLabel } from 'naive-ui';
 import { ref, computed, watch } from 'vue'
-import { Call, Location, Mail, MapSharp, Save } from '@vicons/ionicons5'
-import { createUser, updateUser, getDepartments, getServices, getOffices } from '~/api';
+import { Call, Location, Mail, MapSharp, Save, Archive } from '@vicons/ionicons5'
+import { createUser, updateUser, getDepartments, getServices, getOffices, uploadImage } from '~/api';
 import { MIN_LENGTH_NAME, MAX_LENGTH_NAME, MIN_LENGTH_USERNAME, MAX_LENGTH_USERNAME, MIN_INTERNO, MAX_INTERNO, EMAIL_DOMAIN } from '@/utils/constants';
 import labels from '@/utils/labels/it.json'
 import mongoose from "mongoose"
@@ -320,6 +321,34 @@ const getDepartmenstFromBE = async () => {
     console.error(error)
   }
 }
+
+const uploadPhoto = async ({
+  file,
+  data,
+  headers,
+  // withCredentials,
+  action,
+  onFinish,
+  onError,
+  onProgress
+}) => {
+  console.log(">>> uploadPhoto")
+  const formData = new FormData();
+  if (data) {
+    console.log("SSSSSSSS")
+      Object.keys(data).forEach((key) => {
+      console.log("SSS",key, data[key])
+      formData.append(
+        key,
+        data[key]
+      );
+    });
+  }
+  formData.append("photo", file.file);
+  console.log(formData)
+  const path = await uploadImage(formData)
+  console.log("?????", path)
+};
 
 const getServicesFromBE = async (department = "") => {
   try {

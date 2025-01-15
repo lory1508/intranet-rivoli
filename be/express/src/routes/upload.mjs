@@ -4,29 +4,52 @@ import { LIMIT_UPLOAD } from '../utils/constants.mjs';
 import db from '../../db/conn.mjs'
 
 import multer from 'multer'
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const router = Router();
 
-let newFileName = ""
+// let newFileName = ""
+
+// Setup __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Set the root directory
+const rootPath = path.join(__dirname, '../../'); // Navigate to the root directory
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/')
+    const uploadPath = path.join(rootPath, 'uploads');
+    cb(null, uploadPath); // Save files to the "uploads" directory
   },
   filename: (req, file, cb) => {
-    console.log(file)
-    const originalName = file.originalname.split('.')[0]
-    const extension = file.mimetype.split('/').pop()
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9)
-    newFileName = `${originalName}-${uniqueSuffix}.${extension}`
-    cb(null, newFileName)
-  }
-})
+    const uniqueName = `${Date.now()}-${file.originalname}`;
+    cb(null, uniqueName); // Generate unique filenames
+  },
+});
+
 const upload = multer({ storage })
 
 router.post('/api/upload', upload.single('photo'), async (req, res, next) => {
-  console.log('///', req)
-  res.json({path: newFileName}).status(201)
+  try {
+    const file = req.file;
+
+    if (!file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    // Generate the file URL (adjust based on your hosting setup)
+    const avatarUrl = `/uploads/${file.filename}`;
+
+    res.json({ message: 'Avatar uploaded successfully', avatarUrl });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to upload avatar' });
+  }
 });
+
+// Serve static files from the "uploads" folder
+// router.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 export default router

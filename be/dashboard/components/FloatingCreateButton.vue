@@ -14,6 +14,7 @@
   <DepartmentModal ref="departmentModalRef" />
   <ServiceModal ref="serviceModalRef" />
   <OfficeModal ref="officeModalRef" />
+  <UserModal ref="userModalRef" />
 </template>
 
 <script setup>
@@ -24,6 +25,7 @@ import labels from "~/utils/labels/it.json";
 import DepartmentModal from "~/components/organizzazione/DepartmentModal.vue";
 import ServiceModal from "~/components/organizzazione/ServiceModal.vue";
 import OfficeModal from "~/components/organizzazione/OfficeModal.vue";
+import UserModal from "~/components/dipendenti/UserModal.vue";
 
 const options = ref([
   {
@@ -37,12 +39,17 @@ const options = ref([
   {
     label: labels.office.create.title,
     key: "createOffice",
+  },
+  {
+    label: labels.user.create.title,
+    key: "createUser",
   }
 ])
 
 const departmentModalRef = ref();
 const serviceModalRef = ref();
 const officeModalRef = ref();
+const userModalRef = ref();
 
 const handleSelect = (key) => {
   switch (key) {
@@ -54,6 +61,9 @@ const handleSelect = (key) => {
       break;
     case "createOffice":
       officeModalRef.value.show = true;
+      break;
+    case "createUser":
+      userModalRef.value.show = true;
       break;
   }
 }
