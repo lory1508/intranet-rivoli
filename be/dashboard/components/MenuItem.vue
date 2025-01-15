@@ -34,7 +34,6 @@
           >
             {{ child.label }}
           </NuxtLink>
-          <!-- <div class="w-full py-1 border-b border-white"></div> -->
         </div>
       </NCollapseItem>
     </NCollapse>

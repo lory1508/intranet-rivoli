@@ -1,13 +1,15 @@
 <template>
   <NuxtLoadingIndicator/>
   <NConfigProvider>
-    <NModalProvider>
-      <NuxtLayout>
-      </NuxtLayout>
-    </NModalProvider>
+    <NMessageProvider>
+      <NModalProvider>
+        <NuxtLayout>
+        </NuxtLayout>
+      </NModalProvider>
+    </NMessageProvider>
   </NConfigProvider>
 </template>
 
 <script setup lang="ts">
-import { NModalProvider, NConfigProvider } from 'naive-ui';
+import { NModalProvider, NConfigProvider, NMessageProvider } from 'naive-ui';
 </script>

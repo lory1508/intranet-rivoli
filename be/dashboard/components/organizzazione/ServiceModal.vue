@@ -42,13 +42,15 @@
 </template>
 
 <script setup>
-import { NModal, NCard, NButton, NIcon, NInput, NForm, NFormItem, NSelect } from 'naive-ui';
+import { useMessage, NModal, NCard, NButton, NIcon, NInput, NForm, NFormItem, NSelect } from 'naive-ui';
 import { ref, computed, watch } from 'vue'
 import { Save } from '@vicons/ionicons5'
 import { createService, updateService, getDepartments } from '~/api';
 import { MIN_LENGTH_NAME, MAX_LENGTH_NAME } from '@/utils/constants';
 import labels from '@/utils/labels/it.json'
 import mongoose from "mongoose"
+
+const message = useMessage()
 
 const props = defineProps({
   service: {
@@ -103,9 +105,11 @@ const createOrUpdateService = async () => {
     loading.value = true
     if(isCreate.value) {
       const res = await createService(newService.value)
+      message.success(labels.alerts.serviceCreated)
     } else {
       newService.value.department_id = new mongoose.Types.ObjectId(newService.value.department_id)
       const res = await updateService(newService.value)
+      message.success(labels.alerts.serviceUpdated)
     }
     show.value = false
   } catch (err) {

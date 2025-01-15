@@ -33,12 +33,14 @@
 </template>
 
 <script setup>
-import { NModal, NCard, NButton, NIcon, NInput, NForm, NFormItem } from 'naive-ui';
+import { NModal, NCard, NButton, NIcon, NInput, NForm, NFormItem, useMessage } from 'naive-ui';
 import { ref, computed, watch } from 'vue'
 import { Save } from '@vicons/ionicons5'
 import { createDepartment, updateDepartment } from '~/api';
 import { MIN_LENGTH_NAME, MAX_LENGTH_NAME } from '@/utils/constants';
 import labels from '@/utils/labels/it.json'
+
+const message = useMessage()
 
 const props = defineProps({
   department: {
@@ -83,8 +85,10 @@ const createOrUpdateDepartment = async () => {
     loading.value = true
     if(isCreate.value) {
       const res = await createDepartment(newDepartment.value)
+      message.success(labels.alerts.departmentCreated)
     } else {
       const res = await updateDepartment(newDepartment.value)
+      message.success(labels.alerts.departmentUpdated)
     }
     show.value = false
   } catch (err) {

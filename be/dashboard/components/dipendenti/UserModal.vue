@@ -136,13 +136,15 @@
 </template>
 
 <script setup>
-import { NModal, NCard, NButton, NIcon, NInput, NForm, NFormItem, NSelect, NSwitch, NInputNumber, NInputGroup, NInputGroupLabel } from 'naive-ui';
+import { useMessage, NModal, NCard, NButton, NIcon, NInput, NForm, NFormItem, NSelect, NSwitch, NInputNumber, NInputGroup, NInputGroupLabel } from 'naive-ui';
 import { ref, computed, watch } from 'vue'
 import { Call, Location, Mail, MapSharp, Save } from '@vicons/ionicons5'
 import { createUser, updateUser, getDepartments, getServices, getOffices } from '~/api';
 import { MIN_LENGTH_NAME, MAX_LENGTH_NAME, MIN_LENGTH_USERNAME, MAX_LENGTH_USERNAME, MIN_INTERNO, MAX_INTERNO, EMAIL_DOMAIN } from '@/utils/constants';
 import labels from '@/utils/labels/it.json'
 import mongoose from "mongoose"
+
+const message = useMessage()
 
 const props = defineProps({
   user: {
@@ -284,8 +286,10 @@ const createOrUpdateUser = async () => {
 
     if(isCreate.value) {
       await createUser(newUser.value)
+      message.success(labels.alerts.userCreated)
     } else {
       await updateUser(newUser.value)
+      message.success(labels.alerts.userUpdated)
     }
     show.value = false
   } catch (err) {

@@ -10,7 +10,7 @@
 
 <script setup>
 import { NH1, NTag, NIcon, NDataTable, NButton, NButtonGroup, NPopover, NPopconfirm } from 'naive-ui'
-import { Checkmark, Close } from '@vicons/ionicons5'
+import { Checkmark, Close, ShieldCheckmark, ShieldOutline } from '@vicons/ionicons5'
 import { ref, h } from 'vue'
 import { getUsers, deleteUser } from '~/api'
 import { formatDate } from '@/utils/utils'
@@ -45,14 +45,34 @@ const columns = [
       return h(
         NIcon, 
         {
-          size: 24,
+          size: 22,
           class: row.enabled ?  "text-white bg-green-600 rounded-full" : "text-white bg-red-600 rounded-full"
         },
         { 
           default: () => h(
             row.enabled ? Checkmark : Close,
             {
-              class: "fill-white-400 p-[2px]"
+              class: "p-[2px]"
+            }
+          )
+        }
+      )
+    }
+  },
+  {
+    title: labels.columns.admin,
+    render(row) {
+      return h(
+        NIcon, 
+        {
+          size: row.enabled ? 30 : 22,
+          class: row.enabled ?  "text-green-600" : "text-white bg-red-600 rounded-full"
+        },
+        { 
+          default: () => h(
+            row.enabled ? ShieldCheckmark : Close,
+            {
+              class: "p-[2px]"
             }
           )
         }

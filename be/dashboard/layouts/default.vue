@@ -1,20 +1,20 @@
 <template>
-  <div class="flex flex-col w-full h-full min-h-screen px-4 text-white min-w-max bg-primary-400">
-    <!-- Navbar -->
+  <div class="flex flex-col w-full h-full min-h-screen px-4 pb-4 text-white min-w-max bg-primary-400">
+        <!-- Navbar -->
     <div class="fixed z-50 flex flex-row items-center justify-between w-full gap-2 px-4 py-2 bg-opacity-50 backdrop-blur-md bg-primary-400">
       <div class="flex flex-row items-center gap-4">
         <NImage :src="LOGO_PATH" width="48" />
-        <span class="text-lg">Città di Rivoli - Intranet</span>
+        <span class="text-2xl font-semibold">Città di Rivoli - Intranet</span>
       </div>
       <SearchBar />
-      <div class="flex flex-row gap-2">
+      <div class="flex flex-row gap-2 px-4">
         <div>User</div>
-        <div>Add Element</div>
+        <FloatingCreateButton />
       </div>
     </div>
     <div class="flex flex-row w-full h-full gap-2 mt-10 grow">
       <!-- menu -->
-      <div class="sticky left-0 z-40 flex flex-col gap-2 p-4 mt-4 bg-opacity-50 customMenuClass bg-primary-400 backdrop-blur-md w-52">
+      <div class="sticky left-0 z-40 flex flex-col w-1/12 gap-2 p-4 mt-4 mr-4 bg-opacity-50 customMenuClass bg-primary-400 backdrop-blur-md">
         <MenuItem 
           v-for="(item, index) in menu" 
           :key="item.slug"
@@ -26,9 +26,9 @@
           </template>
         </MenuItem>
       </div>
-      <div class="flex w-full mt-9 grow">
-        <div class="z-20 flex w-full p-4 bg-white shadow-lg grow rounded-2xl backdrop-blur-xl">
-          <div class="w-full h-full">
+      <div class="flex w-11/12 mt-9">
+        <div class="z-20 flex p-4 overflow-x-auto bg-white shadow-lg grow rounded-2xl backdrop-blur-xl">
+          <div class="h-full max-w-full">
             <NuxtPage />
           </div>
         </div>
@@ -43,6 +43,7 @@ import { LOGO_PATH } from '#build/imports';
 import { Search, People, Apps, Podium, Newspaper, Calendar, FolderOpen } from '@vicons/ionicons5'
 import MenuItem from '~/components/MenuItem.vue';
 import SearchBar from '~/components/SearchBar.vue';
+import FloatingCreateButton from '~/components/FloatingCreateButton.vue';
 
 import { ref } from 'vue'
 
