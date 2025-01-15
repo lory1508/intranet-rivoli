@@ -97,6 +97,7 @@
     "uploader": {
       "title": "Clicca o trascina un file in quest'area per caricarlo",
       "subtitle": "Sono ammessi file .png .jpg o .jpeg"
-    }
+    },
+    "search": "Cerca"
   }
 }

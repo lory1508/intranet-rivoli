@@ -6,13 +6,7 @@
         <NImage :src="LOGO_PATH" width="48" />
         <span class="text-lg">Città di Rivoli - Intranet</span>
       </div>
-      <div class="w-80">
-        <NInput round placeholder="Cerca...">
-          <template #suffix>
-            <NIcon :component="Search" />
-          </template>
-        </NInput>
-      </div>
+      <SearchBar />
       <div class="flex flex-row gap-2">
         <div>User</div>
         <div>Add Element</div>
@@ -20,7 +14,7 @@
     </div>
     <div class="flex flex-row w-full h-full gap-2 mt-10 grow">
       <!-- menu -->
-      <div class="sticky left-0 z-40 flex flex-col gap-2 p-4 mt-4 bg-opacity-50 bg-primary-400 backdrop-blur-md w-52">
+      <div class="sticky left-0 z-40 flex flex-col gap-2 p-4 mt-4 bg-opacity-50 customMenuClass bg-primary-400 backdrop-blur-md w-52">
         <MenuItem 
           v-for="(item, index) in menu" 
           :key="item.slug"
@@ -48,6 +42,7 @@ import { NImage, NInput, NIcon } from 'naive-ui'
 import { LOGO_PATH } from '#build/imports';
 import { Search, People, Apps, Podium, Newspaper, Calendar, FolderOpen } from '@vicons/ionicons5'
 import MenuItem from '~/components/MenuItem.vue';
+import SearchBar from '~/components/SearchBar.vue';
 
 import { ref } from 'vue'
 
@@ -109,12 +104,12 @@ const menu = ref([
         slug: 'contenuti-link'
       },
       {
-        label: 'Uffici',
+        label: 'Download',
         to: '/contenuti/download',
         slug: 'contenuti-download'
       },
       {
-        label: 'Servizi',
+        label: 'Avvocatura',
         to: '/contenuti/avvocatura',
         slug: 'contenuti-avvocatura'
       },

@@ -21,10 +21,82 @@ router.get('/api/search', async (req, res) => {
   try {
     // Perform searches on each collection
     const [users, departments, offices, services] = await Promise.all([
-      userCollection.find({ $or: [{ firstname: regex }, { lastname: regex }, {phone: regex}, {email: regex}, {room: regex}] }).toArray(),
+      userCollection.aggregate([
+        {
+          $match: { 
+            $or: [
+              { firstname: regex }, 
+              { lastname: regex }, 
+              {phone: regex}, 
+              {email: regex}, 
+              {room: regex}
+            ] 
+          },
+        },
+        {
+          $lookup: {
+            from: 'departments', // Join with the departments collection
+            localField: 'department_id', // Field in office documents
+            foreignField: '_id', // Field in departments documents
+            as: 'department_info', // Output array field
+          },
+        },
+        {
+          $lookup: {
+            from: 'services', // Join with the services collection
+            localField: 'service_id', // Field in office documents
+            foreignField: '_id', // Field in services documents
+            as: 'service_info', // Output array field
+          },
+        },
+        {
+          $lookup: {
+            from: 'offices', // Join with the services collection
+            localField: 'office_id', // Field in office documents
+            foreignField: '_id', // Field in services documents
+            as: 'office_info', // Output array field
+          },
+        },
+      ]).toArray(),
       departmentCollection.find({ name: regex }).toArray(),
-      officeCollection.find({ name: regex }).toArray(),
-      serviceCollection.find({ name: regex }).toArray(),
+      officeCollection.aggregate([
+        {
+          $match: {
+            name: regex, // Match the office name using the regex
+          },
+        },
+        {
+          $lookup: {
+            from: 'departments', // Join with the departments collection
+            localField: 'department_id', // Field in office documents
+            foreignField: '_id', // Field in departments documents
+            as: 'department_info', // Output array field
+          },
+        },
+        {
+          $lookup: {
+            from: 'services', // Join with the services collection
+            localField: 'service_id', // Field in office documents
+            foreignField: '_id', // Field in services documents
+            as: 'service_info', // Output array field
+          },
+        },
+      ]).toArray(),
+      serviceCollection.aggregate([
+        {
+          $match: {
+            name: regex, // Match the office name using the regex
+          },
+        },
+        {
+          $lookup: {
+            from: 'departments', // Join with the departments collection
+            localField: 'department_id', // Field in office documents
+            foreignField: '_id', // Field in departments documents
+            as: 'department_info', // Output array field
+          },
+        },
+      ]).toArray(),
     ]);
 
     // Combine results into one response

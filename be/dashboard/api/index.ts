@@ -30,6 +30,10 @@ import {
   deleteUser
 } from './users'
 
+import {
+  getSearch
+} from './search'
+
 export {
   getDepartments,
   getDepartment,
@@ -50,5 +54,6 @@ export {
   getUser,
   updateUser,
   createUser,
-  deleteUser
+  deleteUser,
+  getSearch
 }

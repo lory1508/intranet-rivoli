@@ -1,7 +1,7 @@
 <template>
   <NDataTable
     :columns="columns"
-    :data="services"
+    :data="users"
     :pagination="pagination"
     :bordered="false"
     :paginate-single-page="false"
@@ -10,9 +10,9 @@
 
 <script setup>
 import { NH1, NTag, NIcon, NDataTable, NButton, NButtonGroup, NPopover, NPopconfirm } from 'naive-ui'
-import { Add } from '@vicons/ionicons5'
+import { Checkmark, Close } from '@vicons/ionicons5'
 import { ref, h } from 'vue'
-import { getServices, deleteService } from '~/api'
+import { getUsers, deleteUser } from '~/api'
 import { formatDate } from '@/utils/utils'
 import labels from '@/utils/labels/it.json'
 
@@ -20,7 +20,7 @@ import labels from '@/utils/labels/it.json'
 import Loader from '~/components/Loader.vue'
 
 const props = defineProps({
-  services: {
+  users: {
     type: Array,
     required: true
   },
@@ -36,12 +36,32 @@ const props = defineProps({
 const emit = defineEmits(['update', 'refresh'])
 
 const loading = ref(true)
-const serviceModalRef = ref()
+const officeModalRef = ref()
+
 const columns = [
+  {
+    title: labels.columns.enabled,
+    render(row) {
+      return h(
+        NIcon, 
+        {
+          size: 24,
+          class: row.enabled ?  "text-white bg-green-600 rounded-full" : "text-white bg-red-600 rounded-full"
+        },
+        { 
+          default: () => h(
+            row.enabled ? Checkmark : Close,
+            {
+              class: "fill-white-400 p-[2px]"
+            }
+          )
+        }
+      )
+    }
+  },
   {
     title: labels.columns.name,
     key: "name",
-    sorter: (a, b) => a.name.localeCompare(b.name),
     render(row) {
       return h(
         'div',
@@ -50,10 +70,21 @@ const columns = [
           onClick: () => goToDetails(row._id)
         },
         {
-          default: () => row.name
+          default: () => `${row.firstname} ${row.lastname}`
         }
       )
     }
+  },
+  {
+    title: labels.columns.email,
+    key: "email",
+    render(row) {
+      return `${row.email}${EMAIL_DOMAIN}`
+    }
+  },
+  {
+    title: labels.columns.phone,
+    key: "phone",
   },
   {
     title: labels.columns.department,
@@ -74,6 +105,61 @@ const columns = [
         )
       })
       return deps
+    }
+  },
+  {
+    title: labels.columns.service,
+    render(row) {
+      const services = row.service_info.map((serKey) => {
+        return h(
+          NTag,
+          {
+            style: {
+              marginRight: '6px'
+            },
+            type: 'success',
+            bordered: false
+          },
+          {
+            default: () => serKey.name
+          }
+        )
+      })
+      
+      return services.length ? services : h(NTag,
+        {
+          style: {
+            marginRight: '6px',
+            fontStyle: 'italic'
+          },
+          type: 'success',
+          bordered: false
+        },
+        {
+          default: () => "Nessun servizio associato"
+        }
+      )
+    }
+  },
+  {
+    title: labels.columns.office,
+    render(row) {
+      const offs = row.office_info.map((offKey) => {
+        return h(
+          NTag,
+          {
+            style: {
+              marginRight: '6px'
+            },
+            type: 'warning',
+            bordered: false
+          },
+          {
+            default: () => offKey.name
+          }
+        )
+      })
+      return offs
     }
   },
   {
@@ -114,7 +200,7 @@ const columns = [
           h(
             NPopconfirm,
             {
-              onPositiveClick: () => deleteServiceFromBE(row._id),
+              onPositiveClick: () => deleteUserFromBE(row._id),
               positiveButtonProps: {
                 type: "error"
               }
@@ -144,14 +230,14 @@ const columns = [
 
 const goToDetails = async (depId) => {
   await navigateTo({
-    path: `/organizzazione/servizio/${depId}`
+    path: `/dipendenti/${depId}`
   })
 }
 
-const deleteServiceFromBE = async (id) => {
+const deleteUserFromBE = async (id) => {
   try{
     loading.value = true
-    await deleteService(id)
+    await deleteUser(id)
     emit('refresh')
   } catch ( err ) {
     console.error(err)

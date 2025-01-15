@@ -4,6 +4,7 @@
     :data="offices"
     :pagination="pagination"
     :bordered="false"
+    :paginate-single-page="false"
   />
 </template>
 

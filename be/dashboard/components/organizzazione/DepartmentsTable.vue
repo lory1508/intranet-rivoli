@@ -1,27 +1,15 @@
 <template>
-  <Loader v-if="loading" />
-  <div v-else class="flex flex-col">
-    <div class="flex flex-row gap-2 h-fit">
-      <NH1>{{labels.department.title}}</NH1>
-
-      <NPopover trigger="hover">
-        <template #trigger>
-          <ButtonAdd @click="createDepartment" />
-        </template>
-        <span>{{ labels.department.create.label }}</span>
-      </NPopover>
-    </div>
-
-    <DepartmentsTable
-      :departments="departments"
-      :pagination="pagination"
-    />
-  </div>
-  <DepartmentModal ref="departmentModalRef" :department="departmentToBeUpdated" @close="getDepartmentsFromBE" />
+  <NDataTable
+    :columns="columns"
+    :data="departments"
+    :pagination="pagination"
+    :bordered="false"
+    :paginate-single-page="false"
+  />
 </template>
 
 <script setup>
-import { NH1, NIcon, NDataTable, NButton, NButtonGroup, NPopover, NPopconfirm } from 'naive-ui'
+import { NH1, NTag, NIcon, NDataTable, NButton, NButtonGroup, NPopover, NPopconfirm } from 'naive-ui'
 import { Add } from '@vicons/ionicons5'
 import { ref, h } from 'vue'
 import { getDepartments, deleteDepartment } from '~/api'
@@ -29,17 +17,26 @@ import { formatDate } from '@/utils/utils'
 import labels from '@/utils/labels/it.json'
 
 // components
-import DepartmentModal from '~/components/organizzazione/DepartmentModal.vue'
-import DepartmentsTable from '~/components/organizzazione/DepartmentsTable.vue'
 import Loader from '~/components/Loader.vue'
 
-const departments = ref([])
-const pagination = ref(false)
+const props = defineProps({
+  departments: {
+    type: Array,
+    required: true
+  },
+  showActions: {
+    type: Boolean,
+    default: true
+  },
+  pagination: {
+    type: Boolean,
+    default: true
+  }
+})
+const emit = defineEmits(['update', 'refresh'])
+
 const loading = ref(true)
-const departmentToBeUpdated = ref()
-
 const departmentModalRef = ref()
-
 const columns = [
   {
     title: labels.columns.name,
@@ -60,14 +57,22 @@ const columns = [
   {
     title: labels.columns.createdAt,
     key: "created_at",
+    sorter: (a, b) => new Date(a.created_at) - new Date(b.created_at),
     render(row) {
       return formatDate(row.created_at)
     }
   },
   {
+    title: labels.columns.updatedAt,
+    key: "updated_at",
+    render(row) {
+      return formatDate(row.updated_at)
+    }
+  },
+  {
     key: "actions",
     render(row) {
-      return h(
+      return !props.showActions ? '' : h(
         NButtonGroup,
         [
           h(
@@ -79,7 +84,7 @@ const columns = [
               type: "warning",
               size: "small",
               class: "mr-2",
-              onClick: () => openDepartmentModal('update', row)
+              onClick: () => goToDetails(row._id)
             },
             { default: () => labels.actions.edit
             },
@@ -121,40 +126,15 @@ const goToDetails = async (depId) => {
   })
 }
 
-const createDepartment = async () => {
-  departmentModalRef.value.show = !departmentModalRef.value.show
-}
-
-const openDepartmentModal = (operation = 'create', department) => {
-  if(operation=='update')
-    departmentToBeUpdated.value = department
-  departmentModalRef.value.show = !departmentModalRef.value.show
-}
-
-const getDepartmentsFromBE = async () => {
-  try{
-    loading.value = true
-    departments.value = await getDepartments()
-  } catch (err) {
-    console.error(err)
-  } finally {
-    loading.value = false
-  }
-}
-
 const deleteDepartmentFromBE = async (id) => {
   try{
     loading.value = true
     await deleteDepartment(id)
-    await getDepartmentsFromBE()
+    emit('refresh')
   } catch ( err ) {
     console.error(err)
   } finally {
     loading.value = false
   }
 }
-
-onMounted(async () => {
-  await getDepartmentsFromBE()
-})
 </script>
