@@ -1,6 +1,7 @@
 {
   "department": {
     "title": "Direzione",
+    "plural": "Direzioni",
     "create": {
       "title": "Crea direzione",
       "label": "Crea nuova direzione"
@@ -11,6 +12,7 @@
   },
   "service": {
     "title": "Servizio",
+    "plural": "Servizi",
     "create": {
       "title": "Crea servizio",
       "label": "Crea nuovo servizio"
@@ -21,6 +23,7 @@
   },
   "office": {
     "title": "Ufficio",
+    "plural": "Uffici",
     "create": {
       "title": "Crea ufficio",
       "label": "Crea nuovo ufficio"
@@ -31,6 +34,7 @@
   },
   "user": {
     "title": "Dipendente",
+    "plural": "Dipendenti",
     "create": {
       "title": "Crea dipendente",
       "label": "Crea nuovo dipendente"
@@ -54,7 +58,8 @@
     "fax": "Fax",
     "email": "Email",
     "room": "Stanza",
-    "address": "Indirizzo"
+    "address": "Indirizzo",
+    "enabled": "Visibile"
   },
   "actions": {
     "edit": "Modifica",

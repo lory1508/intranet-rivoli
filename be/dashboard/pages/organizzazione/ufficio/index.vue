@@ -2,86 +2,46 @@
   <Loader v-if="loading" />
   <div v-else class="flex flex-col">
     <div class="flex flex-row gap-2 h-fit">
-      <NH1>{{labels.user.title}}</NH1>
+      <NH1>{{labels.office.title}}</NH1>
 
       <NPopover trigger="hover">
         <template #trigger>
-          <ButtonAdd @click="createUser" />
+          <ButtonAdd @click="createOffice" />
         </template>
-        <span>{{ labels.user.create.label }}</span>
+        <span>{{ labels.office.create.label }}</span>
       </NPopover>
     </div>
 
-    <NDataTable
-      :columns="columns"
-      :data="users"
-      :pagination="pagination"
-      :bordered="false"
-      class="w-full"
-    />
+    <OfficeTable :showActions="true" :data="offices" :pagination="pagination" />
   </div>
-  <UserModal ref="userModalRef" :user="userToBeUpdated" @close="getUsersFromBE" />
+  <OfficeModal ref="officeModalRef" :office="officeToBeUpdated" @close="getOfficesFromBE" />
 </template>
 
 <script setup>
 import { NH1, NTag, NIcon, NDataTable, NButton, NButtonGroup, NPopover, NPopconfirm } from 'naive-ui'
-import { Checkmark, Close } from '@vicons/ionicons5'
+import { Add } from '@vicons/ionicons5'
 import { ref, h } from 'vue'
-import { EMAIL_DOMAIN } from '@/utils/constants.ts'
-import { getUsers, deleteUser } from '~/api'
+import { getOffices, deleteOffice } from '~/api'
 import { formatDate } from '@/utils/utils'
+import OfficeTable from '~/components/organizzazione/OfficesTable.vue'
 import labels from '@/utils/labels/it.json'
 
 // components
-import UserModal from '~/components/dipendenti/UserModal.vue'
+import OfficeModal from '~/components/organizzazione/OfficeModal.vue'
 import Loader from '~/components/Loader.vue'
 
-const users = ref([])
+const offices = ref([])
 const pagination = ref(true)
 const loading = ref(true)
-const userToBeUpdated = ref()
+const officeToBeUpdated = ref()
 
-const userModalRef = ref()
+const officeModalRef = ref()
 
 const columns = [
-  {
-    title: labels.columns.enabled,
-    render(row) {
-      return h(
-        NIcon, 
-        {
-          size: 24,
-          class: row.enabled ?  "text-white bg-green-600 rounded-full" : "text-white bg-red-600 rounded-full"
-        },
-        { 
-          default: () => h(
-            row.enabled ? Checkmark : Close,
-            {
-              class: "fill-white-400 p-[2px]"
-            }
-          )
-        }
-      )
-    }
-  },
   {
     title: labels.columns.name,
     key: "name",
     sorter: (a, b) => a.name.localeCompare(b.name),
-    render(row) {
-      return `${row.firstname} ${row.lastname}`
-    }
-  },
-  {
-    title: labels.columns.email,
-    key: "email",
-    render(row) {
-      return `${row.email}${EMAIL_DOMAIN}`
-    }
-  },
-  {
-    title: labels.columns.phone,
-    key: "phone",
   },
   {
     title: labels.columns.department,
@@ -139,27 +99,6 @@ const columns = [
     }
   },
   {
-    title: labels.columns.office,
-    render(row) {
-      const offs = row.office_info.map((offKey) => {
-        return h(
-          NTag,
-          {
-            style: {
-              marginRight: '6px'
-            },
-            type: 'warning',
-            bordered: false
-          },
-          {
-            default: () => offKey.name
-          }
-        )
-      })
-      return offs
-    }
-  },
-  {
     title: labels.columns.createdAt,
     key: "created_at",
     sorter: (a, b) => new Date(a.created_at) - new Date(b.created_at),
@@ -189,7 +128,7 @@ const columns = [
               type: "warning",
               size: "small",
               class: "mr-2",
-              onClick: () => openUserModal('update', row)
+              onClick: () => openOfficeModal('update', row)
             },
             { default: () => labels.actions.edit
             },
@@ -197,7 +136,7 @@ const columns = [
           h(
             NPopconfirm,
             {
-              onPositiveClick: () => deleteUserFromBE(row._id),
+              onPositiveClick: () => deleteOfficeFromBE(row._id),
               positiveButtonProps: {
                 type: "error"
               }
@@ -225,21 +164,21 @@ const columns = [
   }
 ];
 
-const createUser = async () => {
-  userModalRef.value.show = !userModalRef.value.show
+const createOffice = async () => {
+  officeModalRef.value.show = !officeModalRef.value.show
 }
 
-const openUserModal = (operation = 'create', user) => {
+const openOfficeModal = (operation = 'create', office) => {
   if(operation=='update')
-    userToBeUpdated.value = user
-  userModalRef.value.show = !userModalRef.value.show
+    officeToBeUpdated.value = office
+  officeModalRef.value.show = !officeModalRef.value.show
 }
 
-const getUsersFromBE = async () => {
+const getOfficesFromBE = async () => {
   try{
     loading.value = true
-    users.value = await getUsers()
-    userToBeUpdated.value = {}
+    offices.value = await getOffices()
+    officeToBeUpdated.value = {}
   } catch (err) {
     console.error(err)
   } finally {
@@ -247,11 +186,11 @@ const getUsersFromBE = async () => {
   }
 }
 
-const deleteUserFromBE = async (id) => {
+const deleteOfficeFromBE = async (id) => {
   try{
     loading.value = true
-    await deleteUser(id)
-    await getUsersFromBE()
+    await deleteOffice(id)
+    await getOfficesFromBE()
   } catch ( err ) {
     console.error(err)
   } finally {
@@ -260,6 +199,6 @@ const deleteUserFromBE = async (id) => {
 }
 
 onMounted(async () => {
-  await getUsersFromBE()
+  await getOfficesFromBE()
 })
 </script>

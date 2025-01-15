@@ -1,51 +1,58 @@
 <template>
-  <Loader v-if="loading" />
-  <div v-else class="flex flex-col">
-    <div class="flex flex-row gap-2 h-fit">
-      <NH1>{{labels.office.title}}</NH1>
-
-      <NPopover trigger="hover">
-        <template #trigger>
-          <ButtonAdd @click="createOffice" />
-        </template>
-        <span>{{ labels.office.create.label }}</span>
-      </NPopover>
-    </div>
-
-    <NDataTable
-      :columns="columns"
-      :data="offices"
-      :pagination="pagination"
-      :bordered="false"
-    />
-  </div>
-  <OfficeModal ref="officeModalRef" :office="officeToBeUpdated" @close="getOfficesFromBE" />
+  <NDataTable
+    :columns="columns"
+    :data="services"
+    :pagination="pagination"
+    :bordered="false"
+  />
 </template>
 
 <script setup>
 import { NH1, NTag, NIcon, NDataTable, NButton, NButtonGroup, NPopover, NPopconfirm } from 'naive-ui'
 import { Add } from '@vicons/ionicons5'
 import { ref, h } from 'vue'
-import { getOffices, deleteOffice } from '~/api'
+import { getServices, deleteService } from '~/api'
 import { formatDate } from '@/utils/utils'
 import labels from '@/utils/labels/it.json'
 
 // components
-import OfficeModal from '~/components/organizzazione/OfficeModal.vue'
 import Loader from '~/components/Loader.vue'
 
-const offices = ref([])
-const pagination = ref(true)
+const props = defineProps({
+  services: {
+    type: Array,
+    required: true
+  },
+  showActions: {
+    type: Boolean,
+    default: true
+  },
+  pagination: {
+    type: Boolean,
+    default: true
+  }
+})
+const emit = defineEmits(['update', 'refresh'])
+
 const loading = ref(true)
-const officeToBeUpdated = ref()
-
-const officeModalRef = ref()
-
+const serviceModalRef = ref()
 const columns = [
   {
     title: labels.columns.name,
     key: "name",
     sorter: (a, b) => a.name.localeCompare(b.name),
+    render(row) {
+      return h(
+        'div',
+        {
+          class: "cursor-pointer hover:underline",
+          onClick: () => goToDetails(row._id)
+        },
+        {
+          default: () => row.name
+        }
+      )
+    }
   },
   {
     title: labels.columns.department,
@@ -69,40 +76,6 @@ const columns = [
     }
   },
   {
-    title: labels.columns.service,
-    render(row) {
-      const services = row.service_info.map((serKey) => {
-        return h(
-          NTag,
-          {
-            style: {
-              marginRight: '6px'
-            },
-            type: 'success',
-            bordered: false
-          },
-          {
-            default: () => serKey.name
-          }
-        )
-      })
-      
-      return services.length ? services : h(NTag,
-        {
-          style: {
-            marginRight: '6px',
-            fontStyle: 'italic'
-          },
-          type: 'success',
-          bordered: false
-        },
-        {
-          default: () => "Nessun servizio associato"
-        }
-      )
-    }
-  },
-  {
     title: labels.columns.createdAt,
     key: "created_at",
     sorter: (a, b) => new Date(a.created_at) - new Date(b.created_at),
@@ -120,7 +93,7 @@ const columns = [
   {
     key: "actions",
     render(row) {
-      return h(
+      return !props.showActions ? '' : h(
         NButtonGroup,
         [
           h(
@@ -132,7 +105,7 @@ const columns = [
               type: "warning",
               size: "small",
               class: "mr-2",
-              onClick: () => openOfficeModal('update', row)
+              onClick: () => goToDetails(row._id)
             },
             { default: () => labels.actions.edit
             },
@@ -140,7 +113,7 @@ const columns = [
           h(
             NPopconfirm,
             {
-              onPositiveClick: () => deleteOfficeFromBE(row._id),
+              onPositiveClick: () => deleteServiceFromBE(row._id),
               positiveButtonProps: {
                 type: "error"
               }
@@ -168,41 +141,21 @@ const columns = [
   }
 ];
 
-const createOffice = async () => {
-  officeModalRef.value.show = !officeModalRef.value.show
+const goToDetails = async (depId) => {
+  await navigateTo({
+    path: `/organizzazione/servizio/${depId}`
+  })
 }
 
-const openOfficeModal = (operation = 'create', office) => {
-  if(operation=='update')
-    officeToBeUpdated.value = office
-  officeModalRef.value.show = !officeModalRef.value.show
-}
-
-const getOfficesFromBE = async () => {
+const deleteServiceFromBE = async (id) => {
   try{
     loading.value = true
-    offices.value = await getOffices()
-    officeToBeUpdated.value = {}
-  } catch (err) {
-    console.error(err)
-  } finally {
-    loading.value = false
-  }
-}
-
-const deleteOfficeFromBE = async (id) => {
-  try{
-    loading.value = true
-    await deleteOffice(id)
-    await getOfficesFromBE()
+    await deleteService(id)
+    emit('refresh')
   } catch ( err ) {
     console.error(err)
   } finally {
     loading.value = false
   }
 }
-
-onMounted(async () => {
-  await getOfficesFromBE()
-})
 </script>

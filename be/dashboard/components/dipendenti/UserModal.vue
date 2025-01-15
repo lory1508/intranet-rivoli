@@ -8,7 +8,6 @@
       role="dialog"
       aria-modal="true"
     >
-    <pre>{{isCreate }}</pre>
       <NForm :model="newUser" :rules="rules" class="grid grid-cols-3 gap-2">
         <div class="flex flex-row col-span-3 gap-32">
           <NFormItem path="enabled" >

@@ -1,52 +1,57 @@
 <template>
-  <Loader v-if="loading" />
-  <div v-else class="flex flex-col">
-    <div class="flex flex-row gap-2 h-fit">
-      <NH1>{{labels.service.title}}</NH1>
-
-      <NPopover trigger="hover">
-        <template #trigger>
-          <ButtonAdd @click="createService" />
-        </template>
-        <span>{{ labels.service.create.label }}</span>
-      </NPopover>
-    </div>
-
-    <NDataTable
-      :columns="columns"
-      :data="services"
-      :pagination="pagination"
-      :bordered="false"
-    />
-  </div>
-  <ServiceModal ref="serviceModalRef" :service="serviceToBeUpdated" @close="getServicesFromBE" />
+  <NDataTable
+    :columns="columns"
+    :data="offices"
+    :pagination="pagination"
+    :bordered="false"
+  />
 </template>
 
 <script setup>
 import { NH1, NTag, NIcon, NDataTable, NButton, NButtonGroup, NPopover, NPopconfirm } from 'naive-ui'
 import { Add } from '@vicons/ionicons5'
 import { ref, h } from 'vue'
-import { getServices, deleteService } from '~/api'
+import { getOffices, deleteOffice } from '~/api'
 import { formatDate } from '@/utils/utils'
 import labels from '@/utils/labels/it.json'
 
 // components
-import ServiceModal from '~/components/organizzazione/ServiceModal.vue'
-import ButtonAdd from '~/components/ButtonAdd.vue'
 import Loader from '~/components/Loader.vue'
 
-const services = ref([])
-const pagination = ref(false)
+const props = defineProps({
+  offices: {
+    type: Array,
+    required: true
+  },
+  showActions: {
+    type: Boolean,
+    default: true
+  },
+  pagination: {
+    type: Boolean,
+    default: true
+  }
+})
+const emit = defineEmits(['update', 'refresh'])
+
 const loading = ref(true)
-const serviceToBeUpdated = ref()
-
-const serviceModalRef = ref()
-
+const officeModalRef = ref()
 const columns = [
   {
     title: labels.columns.name,
     key: "name",
-    sorter: (a, b) => a.name.localeCompare(b.name),
+    render(row) {
+      return h(
+        'div',
+        {
+          class: "cursor-pointer hover:underline",
+          onClick: () => goToDetails(row._id)
+        },
+        {
+          default: () => row.name
+        }
+      )
+    }
   },
   {
     title: labels.columns.department,
@@ -70,6 +75,40 @@ const columns = [
     }
   },
   {
+    title: labels.columns.service,
+    render(row) {
+      const services = row.service_info.map((serKey) => {
+        return h(
+          NTag,
+          {
+            style: {
+              marginRight: '6px'
+            },
+            type: 'success',
+            bordered: false
+          },
+          {
+            default: () => serKey.name
+          }
+        )
+      })
+      
+      return services.length ? services : h(NTag,
+        {
+          style: {
+            marginRight: '6px',
+            fontStyle: 'italic'
+          },
+          type: 'success',
+          bordered: false
+        },
+        {
+          default: () => "Nessun servizio associato"
+        }
+      )
+    }
+  },
+  {
     title: labels.columns.createdAt,
     key: "created_at",
     sorter: (a, b) => new Date(a.created_at) - new Date(b.created_at),
@@ -87,7 +126,7 @@ const columns = [
   {
     key: "actions",
     render(row) {
-      return h(
+      return !props.showActions ? '' : h(
         NButtonGroup,
         [
           h(
@@ -99,7 +138,7 @@ const columns = [
               type: "warning",
               size: "small",
               class: "mr-2",
-              onClick: () => openServiceModal('update', row)
+              onClick: () => goToDetails(row._id)
             },
             { default: () => labels.actions.edit
             },
@@ -107,7 +146,7 @@ const columns = [
           h(
             NPopconfirm,
             {
-              onPositiveClick: () => deleteServiceFromBE(row._id),
+              onPositiveClick: () => deleteOfficeFromBE(row._id),
               positiveButtonProps: {
                 type: "error"
               }
@@ -135,41 +174,21 @@ const columns = [
   }
 ];
 
-const createService = async () => {
-  serviceModalRef.value.show = !serviceModalRef.value.show
+const goToDetails = async (depId) => {
+  await navigateTo({
+    path: `/organizzazione/ufficio/${depId}`
+  })
 }
 
-const openServiceModal = (operation = 'create', service) => {
-  if(operation=='update')
-    serviceToBeUpdated.value = service
-  serviceModalRef.value.show = !serviceModalRef.value.show
-}
-
-const getServicesFromBE = async () => {
+const deleteOfficeFromBE = async (id) => {
   try{
     loading.value = true
-    services.value = await getServices()
-    serviceToBeUpdated.value = {}
-  } catch (err) {
-    console.error(err)
-  } finally {
-    loading.value = false
-  }
-}
-
-const deleteServiceFromBE = async (id) => {
-  try{
-    loading.value = true
-    await deleteService(id)
-    await getServicesFromBE()
+    await deleteOffice(id)
+    emit('refresh')
   } catch ( err ) {
     console.error(err)
   } finally {
     loading.value = false
   }
 }
-
-onMounted(async () => {
-  await getServicesFromBE()
-})
 </script>

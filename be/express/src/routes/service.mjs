@@ -29,16 +29,14 @@ router.get(
       }
     ]).toArray()
     
-    // let results = await collection.find({}).toArray()
+    if( filter && value ) {
+      results = results.filter(office => {
+        const stringifiedFilter = JSON.stringify(office[filter])
+        const stringifiedValue = JSON.stringify(value)
+        return stringifiedFilter == stringifiedValue
+      })
+    }
     return res.status(200).send(results);
-
-    
-    // .limit(50)
-    
-    // filter results
-    // if (filter && value)
-    //   return res.sendStatus(500)
-
   }
 );
 

@@ -44,7 +44,19 @@ const departmentModalRef = ref()
 const columns = [
   {
     title: labels.columns.name,
-    key: "name"
+    key: "name",
+    render(row) {
+      return h(
+        'div',
+        {
+          class: "cursor-pointer hover:underline",
+          onClick: () => goToDetails(row._id)
+        },
+        {
+          default: () => row.name
+        }
+      )
+    }
   },
   {
     title: labels.columns.createdAt,
@@ -103,6 +115,12 @@ const columns = [
     }
   }
 ];
+
+const goToDetails = async (depId) => {
+  await navigateTo({
+    path: `/organizzazione/direzione/${depId}`
+  })
+}
 
 const createDepartment = async () => {
   departmentModalRef.value.show = !departmentModalRef.value.show

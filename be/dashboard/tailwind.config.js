@@ -38,6 +38,18 @@ export default {
           800: "#001533",
           900: "#001022",
           950: "#000d1a"
+        },
+        department : {
+          bg: "#e4f0fe",
+          text: "#328af1"
+        },
+        service: {
+          bg: "#e3f4eb",
+          text: "#20a45f"
+        },
+        office: {
+          bg: "#fdf1dd",
+          text: "#f0a020"
         }
       }
     },

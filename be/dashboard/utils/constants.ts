@@ -13,6 +13,7 @@ const MAX_LENGTH_USERNAME: number = 150
 const MIN_INTERNO: number = 1
 const MAX_INTERNO: number = 9999
 const EMAIL_DOMAIN: string = '@comune.rivoli.to.it'
+const UNCLICKABLE_MENU_ITEMS: string[] = ['organizzazione', 'contenuti']
 
 export {
   BE_PATH,
@@ -23,5 +24,6 @@ export {
   MAX_LENGTH_USERNAME,
   MIN_INTERNO,
   MAX_INTERNO,
-  EMAIL_DOMAIN
+  EMAIL_DOMAIN,
+  UNCLICKABLE_MENU_ITEMS,
 }

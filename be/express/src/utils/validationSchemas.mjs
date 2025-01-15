@@ -50,15 +50,14 @@ export const createUserValidationSchema = {
   department_id:{
     notEmpty: {
       errorMessage: "La direzione non può essere vuota"
-    },},
-  service_id:{
-    notEmpty: {
-      errorMessage: "Il servizio non può essere vuoto"
-    },},
+    },
+  },
+  service_id:{},
   office_id:{
     notEmpty: {
       errorMessage: "L'ufficio non può essere vuoto"
-    },},
+    },
+  },
   address:{},
   photo:{},
   enabled:{},

@@ -2,8 +2,12 @@ import { BE_PATH } from '@/utils/constants'
 
 const COLLECTION = 'services'
 
-const getServices = async () => {
-  const data = await $fetch(`${BE_PATH}/${COLLECTION}`)
+const getServices = async (filter = {}) => {
+  let queryString = ''
+  if(Object.keys(filter).length > 0){
+    queryString = `?${Object.keys(filter).map(key => `${key}=${filter[key]}`).join('&')}`
+  }
+  const data = await $fetch(`${BE_PATH}/${COLLECTION}${queryString}`)
   return data
 }
 
