@@ -28,7 +28,7 @@
       </div>
       <div class="flex w-11/12 mt-9">
         <div class="z-20 flex p-4 overflow-x-auto bg-white shadow-lg grow rounded-2xl backdrop-blur-xl">
-          <div class="h-full max-w-full">
+          <div class="w-full h-full max-w-full">
             <NuxtPage />
           </div>
         </div>
