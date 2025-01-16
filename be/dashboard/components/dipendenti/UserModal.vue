@@ -309,7 +309,7 @@ const title = computed(() => {
     return labels.user.create.title
 })
 
-const getDepartmenstData = async () => {
+const getDepartmentsData = async () => {
   try {
     departments.value = await getDepartments()
     departmentsOptions.value = departments.value.map((dep) => {
@@ -409,7 +409,7 @@ watch(show, async (newShowValue) => {
     newUser.value={...defaultUser}
     emit('close')
   } else {
-    await getDepartmenstData()
+    await getDepartmentsData()
     await getServicesData()
     await getOfficesData()
     if(props.user){

@@ -39,6 +39,30 @@ import {
   getImage
 } from './upload'
 
+import {
+  getAllNews,
+  getNews,
+  updateNews,
+  createNews,
+  deleteNews
+} from './news'
+
+import {
+  getNewsCategories,
+  getNewsCategory,
+  updateNewsCategory,
+  createNewsCategory,
+  deleteNewsCategory
+} from './newsCategories'
+
+import {
+  getNewsTags,
+  getNewsTag,
+  updateNewsTag,
+  createNewsTag,
+  deleteNewsTag
+} from './newsTags'
+
 export {
   getDepartments,
   getDepartment,
@@ -62,5 +86,20 @@ export {
   deleteUser,
   getSearch,
   uploadImage,
-  getImage
+  getImage,
+  getAllNews,
+  getNews,
+  updateNews,
+  createNews,
+  deleteNews,
+  getNewsCategories,
+  getNewsCategory,
+  updateNewsCategory,
+  createNewsCategory,
+  deleteNewsCategory,
+  getNewsTags,
+  getNewsTag,
+  updateNewsTag,
+  createNewsTag,
+  deleteNewsTag
 }

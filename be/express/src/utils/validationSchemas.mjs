@@ -119,3 +119,61 @@ export const createOfficeValidationSchema = {
   },
   service_id: {},
 }
+
+export const createNewsValidationSchema = {
+  title: {
+    isLength: {
+      options: {
+        min: 5,
+        max: 150
+      },
+      errorMessage: "Il titolo dev'essere di almeno 5 caratteri e massimo 150"
+    },
+    notEmpty: {
+      errorMessage: "Il titolo non può essere vuoto"
+    },
+  },
+  date_from: {
+    notEmpty: {
+      errorMessage: "La data di inizio non può essere vuota"
+    },
+  },
+  date_to: {},
+  content: {},
+  category_id: {},
+  tag_ids: {},
+  visible: {},
+  highlighted: {},
+  images: {},
+  attachments: {},
+}
+
+export const createNewsCategoryValidationSchema = {
+  name: {
+    isLength: {
+      options: {
+        min: 2,
+        max: 150
+      },
+      errorMessage: "Il titolo dev'essere di almeno 2 caratteri e massimo 150"
+    },
+    notEmpty: {
+      errorMessage: "Il titolo non può essere vuoto"
+    },
+  },
+}
+
+export const createNewsTagValidationSchema = {
+  name: {
+    isLength: {
+      options: {
+        min: 2,
+        max: 150
+      },
+      errorMessage: "Il titolo dev'essere di almeno 2 caratteri e massimo 150"
+    },
+    notEmpty: {
+      errorMessage: "Il titolo non può essere vuoto"
+    },
+  },
+}

@@ -8,6 +8,8 @@ const LOGO_PATH: string = '/img/logo.png'
 
 const MIN_LENGTH_NAME: number = 2
 const MAX_LENGTH_NAME: number = 150
+const MIN_LENGTH_5: number = 5
+const MAX_LENGTH_180: number = 180
 const MIN_LENGTH_USERNAME: number = 5
 const MAX_LENGTH_USERNAME: number = 150
 const MIN_INTERNO: number = 1
@@ -26,4 +28,6 @@ export {
   MAX_INTERNO,
   EMAIL_DOMAIN,
   UNCLICKABLE_MENU_ITEMS,
+  MIN_LENGTH_5,
+  MAX_LENGTH_180
 }

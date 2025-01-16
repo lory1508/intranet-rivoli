@@ -149,7 +149,7 @@ const title = computed(() => {
     return labels.office.create.title
 })
 
-const getDepartmenstData = async () => {
+const getDepartmentsData = async () => {
   try {
     const data = await getDepartments()
     departments.value = data.map((dep) => {
@@ -195,7 +195,7 @@ watch(show, async (newShowValue) => {
     }
     emit('close')
   } else {
-    await getDepartmenstData()
+    await getDepartmentsData()
     await getServicesData()
     if(props.office){
       newOffice.value = { ...props.office }

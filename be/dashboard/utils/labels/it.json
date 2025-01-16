@@ -44,6 +44,17 @@
       "title": "Aggiorna dipendente"
     }
   },
+  "news": {
+    "title": "News",
+    "plural": "News",
+    "create": {
+      "title": "Crea news",
+      "label": "Crea nuova news"
+    },
+    "update": { 
+      "title": "Aggiorna news"
+    }
+  },
   "columns": {
     "name": "Nome",
     "department": "Direzione",
@@ -81,23 +92,42 @@
     "officeCreated": "Ufficio creato con successo.",
     "officeUpdated": "Ufficio aggiornato con successo.",
     "officeDeleted": "Ufficio eliminato con successo.",
-    "photoUploaded": "Foto caricata con successo."
+    "userCreated": "Dipendente creato con successo.",
+    "userUpdated": "Dipendente aggiornato con successo.",
+    "userDeleted": "Dipendente eliminato con successo.",
+    "photoUploaded": "Foto caricata con successo.",
+    "attachmentUploaded": "Allegato caricato con successo.",
+    "imageUploaded": "Immagine caricata con successo",
+    "newsCreated": "Notizia creata con successo.",
+    "newsUpdated": "Notizia aggiornata con successo.",
+    "newsDeleted": "Notizia eliminata."
   },
   "validations": {
     "required": "questo campo è obbligatorio",
     "min5": "questo campo deve essere di almeno 5 caratteri",
     "min2": "questo campo deve essere di almeno 2 caratteri",
+    "max180": "questo campo deve essere al massimo di 180 caratteri",
     "max150": "questo campo deve essere al massimo di 150 caratteri"
   },
   "form": {
     "username": "Nome utente",
     "firstname": "Nome",
     "lastname": "Cognome",
+    "dateFrom": "Data da",
+    "dateTo": "Data a",
+    "images": "Immagini",
+    "content": "Contenuto",
+    "title": "Titolo",
+    "highlighted": "In evidenza",
+    "nothighlighted": "Non in evidenza",
+    "attachments": "Allegati",
     "phone": "Interno",
     "fax": "Fax",
     "email": "Email",
     "room": "Stanza",
     "department": "Direzione",
+    "tags": "Tag",
+    "category": "Categoria",
     "service": "Servizio",
     "office": "Ufficio",
     "address": "Indirizzo",
@@ -108,7 +138,8 @@
     "notadmin": "Non abilitato alle modifiche",
     "uploader": {
       "title": "Clicca o trascina un file in quest'area per caricarlo",
-      "subtitle": "Sono ammessi file .png .jpg o .jpeg"
+      "subtitle": "Sono ammessi file .png .jpg o .jpeg",
+      "doc": "Sono ammessi file .pdf .doc .docx .xls .xlsx .ppt o .pptx"
     },
     "search": "Cerca"
   },
