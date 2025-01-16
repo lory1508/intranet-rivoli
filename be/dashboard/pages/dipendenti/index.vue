@@ -17,7 +17,7 @@
       :pagination="pagination"
     />
   </div>
-  <UserModal ref="userModalRef" :user="userToBeUpdated" @close="getUsersFromBE" />
+  <UserModal ref="userModalRef" :user="userToBeUpdated" @close="getUsersData" />
 </template>
 
 <script setup>
@@ -45,7 +45,7 @@ const createUser = async () => {
   userModalRef.value.show = !userModalRef.value.show
 }
 
-const getUsersFromBE = async () => {
+const getUsersData = async () => {
   try{
     loading.value = true
     users.value = await getUsers()
@@ -58,6 +58,6 @@ const getUsersFromBE = async () => {
 }
 
 onMounted(async () => {
-  await getUsersFromBE()
+  await getUsersData()
 })
 </script>

@@ -114,7 +114,7 @@ const columns = [
           h(
             NPopconfirm,
             {
-              onPositiveClick: () => deleteServiceFromBE(row._id),
+              onPositiveClick: () => deleteServiceData(row._id),
               positiveButtonProps: {
                 type: "error"
               }
@@ -148,7 +148,7 @@ const goToDetails = async (depId) => {
   })
 }
 
-const deleteServiceFromBE = async (id) => {
+const deleteServiceData = async (id) => {
   try{
     loading.value = true
     await deleteService(id)

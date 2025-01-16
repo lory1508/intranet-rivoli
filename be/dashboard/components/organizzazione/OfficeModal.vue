@@ -149,7 +149,7 @@ const title = computed(() => {
     return labels.office.create.title
 })
 
-const getDepartmenstFromBE = async () => {
+const getDepartmenstData = async () => {
   try {
     const data = await getDepartments()
     departments.value = data.map((dep) => {
@@ -163,7 +163,7 @@ const getDepartmenstFromBE = async () => {
   }
 }
 
-const getServicesFromBE = async (department = "") => {
+const getServicesData = async (department = "") => {
   try {
     if(!department){
       services.value =  await getServices()
@@ -195,8 +195,8 @@ watch(show, async (newShowValue) => {
     }
     emit('close')
   } else {
-    await getDepartmenstFromBE()
-    await getServicesFromBE()
+    await getDepartmenstData()
+    await getServicesData()
     if(props.office){
       newOffice.value = { ...props.office }
     } else {
@@ -216,7 +216,7 @@ watch(newOffice,
       showError.value = (newValue.name?.length < MIN_LENGTH_NAME || newValue.name?.length > MAX_LENGTH_NAME) || !newValue.department_id
 
       if(newValue.department_id != selectedDepartment.value){
-        getServicesFromBE(newValue.department_id)
+        getServicesData(newValue.department_id)
         selectedDepartment.value = newValue.department_id
       }
     }

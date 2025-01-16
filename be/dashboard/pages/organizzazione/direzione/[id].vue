@@ -35,7 +35,7 @@ const filter = {
   value: route.params.id
 }
 
-const getDepartmentFromBE = async () => {
+const getDepartmentData = async () => {
   try {
     loading.value = true
     const id = route.params.id
@@ -48,7 +48,7 @@ const getDepartmentFromBE = async () => {
   }
 }
 
-const getOfficesFromBE = async () => {
+const getOfficesData = async () => {
   try {
     loading.value = true
     offices.value = await getOffices(filter)
@@ -59,7 +59,7 @@ const getOfficesFromBE = async () => {
   }
 }
 
-const getServicesFromBE = async () => {
+const getServicesData = async () => {
   try{
     loading.value = true
     services.value = await getServices(filter)
@@ -71,9 +71,9 @@ const getServicesFromBE = async () => {
 }
 
 onMounted( async () => {
-  await getDepartmentFromBE()
-  await getOfficesFromBE()
-  await getServicesFromBE()
+  await getDepartmentData()
+  await getOfficesData()
+  await getServicesData()
   const tmpBreadcrumbs = route.fullPath.split('/').filter((el) => el !== '')
   for (let index = 0; index < tmpBreadcrumbs.length; index++) {
     if(route.params.id === tmpBreadcrumbs[index]) {

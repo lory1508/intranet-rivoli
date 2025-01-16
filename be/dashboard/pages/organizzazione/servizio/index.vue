@@ -14,7 +14,7 @@
     
     <ServicesTable :services="services" :pagination="pagination" :showActions="true" />
   </div>
-  <ServiceModal ref="serviceModalRef" :service="serviceToBeUpdated" @close="getServicesFromBE" />
+  <ServiceModal ref="serviceModalRef" :service="serviceToBeUpdated" @close="getServicesData" />
 </template>
 
 <script setup>
@@ -42,7 +42,7 @@ const createService = async () => {
   serviceModalRef.value.show = !serviceModalRef.value.show
 }
 
-const getServicesFromBE = async () => {
+const getServicesData = async () => {
   try{
     loading.value = true
     services.value = await getServices()
@@ -55,6 +55,6 @@ const getServicesFromBE = async () => {
 }
 
 onMounted(async () => {
-  await getServicesFromBE()
+  await getServicesData()
 })
 </script>

@@ -127,7 +127,7 @@ const title = computed(() => {
     return labels.service.create.title
 })
 
-const getDepartmenstFromBE = async () => {
+const getDepartmenstData = async () => {
   try {
     const data = await getDepartments()
     departments.value = data.map((dep) => {
@@ -149,7 +149,7 @@ watch(show, async (newShowValue) => {
     }
     emit('close')
   } else {
-    await getDepartmenstFromBE()
+    await getDepartmenstData()
     if(props.service){
       newService.value = { ...props.service }
 

@@ -30,12 +30,12 @@ const offices = ref([])
 
 const pagination = ref(true)
 
-const getServiceFromBE = async () => {
+const getServiceData = async () => {
   try {
     loading.value = true
     const id = route.params.id
     service.value = await getService(id)
-    await getDepartmentFromBE(service.value.department_id)
+    await getDepartmentData(service.value.department_id)
     loading.value = false
   } catch (error) {
     console.error(error)
@@ -44,12 +44,11 @@ const getServiceFromBE = async () => {
   }
 }
 
-const getDepartmentFromBE = async (department_id) => {
+const getDepartmentData = async (department_id) => {
   try {
     if(!department_id) return
     loading.value = true
     department.value = await getDepartment(department_id)
-    console.log(department.value)
     loading.value = false
   } catch (error) {
     console.error(error)
@@ -58,7 +57,7 @@ const getDepartmentFromBE = async (department_id) => {
   }
 }
 
-const getOfficesFromBE = async () => {
+const getOfficesData = async () => {
   try {
     loading.value = true
     const filter = {
@@ -75,8 +74,8 @@ const getOfficesFromBE = async () => {
 }
 
 onMounted( async () => {
-  await getServiceFromBE()
-  await getOfficesFromBE()
+  await getServiceData()
+  await getOfficesData()
   const tmpBreadcrumbs = route.fullPath.split('/').filter((el) => el !== '')
   for (let index = 0; index < tmpBreadcrumbs.length; index++) {
     if(route.params.id === tmpBreadcrumbs[index]) {

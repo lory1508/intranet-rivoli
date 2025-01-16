@@ -17,7 +17,7 @@
       :pagination="pagination"
     />
   </div>
-  <DepartmentModal ref="departmentModalRef" :department="departmentToBeUpdated" @close="getDepartmentsFromBE" />
+  <DepartmentModal ref="departmentModalRef" :department="departmentToBeUpdated" @close="getDepartmentsData" />
 </template>
 
 <script setup>
@@ -87,7 +87,7 @@ const columns = [
           h(
             NPopconfirm,
             {
-              onPositiveClick: () => deleteDepartmentFromBE(row._id),
+              onPositiveClick: () => deleteDepartmentData(row._id),
               positiveButtonProps: {
                 type: "error"
               }
@@ -131,7 +131,7 @@ const openDepartmentModal = (operation = 'create', department) => {
   departmentModalRef.value.show = !departmentModalRef.value.show
 }
 
-const getDepartmentsFromBE = async () => {
+const getDepartmentsData = async () => {
   try{
     loading.value = true
     departments.value = await getDepartments()
@@ -142,11 +142,11 @@ const getDepartmentsFromBE = async () => {
   }
 }
 
-const deleteDepartmentFromBE = async (id) => {
+const deleteDepartmentData = async (id) => {
   try{
     loading.value = true
     await deleteDepartment(id)
-    await getDepartmentsFromBE()
+    await getDepartmentsData()
   } catch ( err ) {
     console.error(err)
   } finally {
@@ -155,6 +155,6 @@ const deleteDepartmentFromBE = async (id) => {
 }
 
 onMounted(async () => {
-  await getDepartmentsFromBE()
+  await getDepartmentsData()
 })
 </script>

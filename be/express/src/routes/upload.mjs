@@ -49,6 +49,18 @@ router.post('/api/upload', upload.single('photo'), async (req, res, next) => {
   }
 });
 
+router.get('/api/uploads/:filename', (req, res) => {
+  const filePath = path.join(process.cwd(), 'uploads', req.params.filename);
+
+  // Send the file if it exists, otherwise send a 404 error
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      console.error(err);
+      res.status(404).json({ error: 'File not found' });
+    }
+  });
+});
+
 // Serve static files from the "uploads" folder
 // router.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

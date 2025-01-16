@@ -35,6 +35,7 @@
   "user": {
     "title": "Dipendente",
     "plural": "Dipendenti",
+    "personalData": "Dati personali",
     "create": {
       "title": "Crea dipendente",
       "label": "Crea nuovo dipendente"
@@ -79,7 +80,8 @@
     "serviceDeleted": "Servizio eliminato con successo.",
     "officeCreated": "Ufficio creato con successo.",
     "officeUpdated": "Ufficio aggiornato con successo.",
-    "officeDeleted": "Ufficio eliminato con successo."
+    "officeDeleted": "Ufficio eliminato con successo.",
+    "photoUploaded": "Foto caricata con successo."
   },
   "validations": {
     "required": "questo campo è obbligatorio",
@@ -109,5 +111,8 @@
       "subtitle": "Sono ammessi file .png .jpg o .jpeg"
     },
     "search": "Cerca"
+  },
+  "errors": {
+    "generic": "Si è verificato un errore, riprova più tardi."
   }
 }

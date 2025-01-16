@@ -65,12 +65,12 @@ const columns = [
       return h(
         NIcon, 
         {
-          size: row.enabled ? 30 : 22,
-          class: row.enabled ?  "text-green-600" : "text-white bg-red-600 rounded-full"
+          size: row.admin ? 30 : 22,
+          class: row.admin ?  "text-green-600" : "text-white bg-red-600 rounded-full"
         },
         { 
           default: () => h(
-            row.enabled ? ShieldCheckmark : Close,
+            row.admin ? ShieldCheckmark : Close,
             {
               class: "p-[2px]"
             }
@@ -220,7 +220,7 @@ const columns = [
           h(
             NPopconfirm,
             {
-              onPositiveClick: () => deleteUserFromBE(row._id),
+              onPositiveClick: () => deleteUserData(row._id),
               positiveButtonProps: {
                 type: "error"
               }
@@ -254,7 +254,7 @@ const goToDetails = async (depId) => {
   })
 }
 
-const deleteUserFromBE = async (id) => {
+const deleteUserData = async (id) => {
   try{
     loading.value = true
     await deleteUser(id)

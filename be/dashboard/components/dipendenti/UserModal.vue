@@ -31,7 +31,7 @@
           <NInput :placeholder="labels.form.username" v-model:value="newUser.username" :showCount="true" :maxlength="MAX_LENGTH_USERNAME" :minlength="MIN_LENGTH_USERNAME"/>
         </NFormItem>
         <NFormItem path="phone" :label="labels.form.phone">
-          <NInputNumber class="w-full" :placeholder="labels.form.phone" v-model:value="newUser.phone" :min="MIN_INTERNO" :max="MAX_INTERNO" :show-button="false" :format="formatPhone">
+          <NInputNumber class="w-full" :placeholder="labels.form.phone" v-model:value="newUser.phone" :max="MAX_INTERNO" :show-button="false" :format="formatPhone">
             <template #prefix>
               <NIcon><Call /></NIcon>
             </template>
@@ -288,6 +288,7 @@ const createOrUpdateUser = async () => {
     if(isCreate.value) {
       await createUser(newUser.value)
       message.success(labels.alerts.userCreated)
+      // TODO: Delete avatar if user creation fails
     } else {
       await updateUser(newUser.value)
       message.success(labels.alerts.userUpdated)
@@ -308,7 +309,7 @@ const title = computed(() => {
     return labels.user.create.title
 })
 
-const getDepartmenstFromBE = async () => {
+const getDepartmenstData = async () => {
   try {
     departments.value = await getDepartments()
     departmentsOptions.value = departments.value.map((dep) => {
@@ -332,25 +333,19 @@ const uploadPhoto = async ({
   onError,
   onProgress
 }) => {
-  console.log(">>> uploadPhoto")
-  const formData = new FormData();
-  if (data) {
-    console.log("SSSSSSSS")
-      Object.keys(data).forEach((key) => {
-      console.log("SSS",key, data[key])
-      formData.append(
-        key,
-        data[key]
-      );
-    });
+  try{
+    const formData = new FormData();
+    formData.append("photo", file.file);
+    const res = await uploadImage(formData)
+    newUser.value.photo = res.avatarUrl
+    message.success(labels.alerts.photoUploaded)
+  } catch (err) {
+    console.error("ERROR: ", err)
+    message.error(labels.errors.generic)
   }
-  formData.append("photo", file.file);
-  console.log(formData)
-  const path = await uploadImage(formData)
-  console.log("?????", path)
 };
 
-const getServicesFromBE = async (department = "") => {
+const getServicesData = async (department = "") => {
   try {
     if(!department){
       services.value =  await getServices()
@@ -373,7 +368,7 @@ const getServicesFromBE = async (department = "") => {
   }
 }
 
-const getOfficesFromBE = async (department = "", service = "") => {
+const getOfficesData = async (department = "", service = "") => {
   try {
     if(!department && !service){
       offices.value =  await getOffices()
@@ -403,18 +398,6 @@ const getOfficesFromBE = async (department = "", service = "") => {
   }
 }
 
-const uploadingPhoto = async (data) => {
-  console.log(data)
-  if (data.file.file?.type !== "image/png") {
-    message.error(
-      "Only upload picture files in png format, please re-upload."
-    );
-    return false;
-  }
-  return true;
-}
-
-
 const formatPhone = (value) => {
   if (value === null)
     return ''
@@ -426,9 +409,9 @@ watch(show, async (newShowValue) => {
     newUser.value={...defaultUser}
     emit('close')
   } else {
-    await getDepartmenstFromBE()
-    await getServicesFromBE()
-    await getOfficesFromBE()
+    await getDepartmenstData()
+    await getServicesData()
+    await getOfficesData()
     if(props.user){
       newUser.value = { ...props.user }
     } else {
@@ -443,11 +426,12 @@ watch(newUser,
     showError.value = (newValue.name?.length < MIN_LENGTH_USERNAME || newValue.name?.length > MAX_LENGTH_USERNAME) || !newValue.department_id
 
     if(newValue.firstname && newValue.lastname){
-      newUser.value.username = `${newValue.firstname.toLowerCase()}.${newValue.lastname.toLowerCase()}`
+      newUser.value.email = `${newValue.firstname.toLowerCase()}.${newValue.lastname.toLowerCase()}`
+      newUser.value.username = `${Array.from(newValue.firstname.toLowerCase())[0]}.${newValue.lastname.toLowerCase()}`
     }
 
     if(newValue.department_id){
-      getServicesFromBE(newValue.department_id)
+      getServicesData(newValue.department_id)
     }
   },
   { deep: true }

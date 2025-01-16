@@ -31,7 +31,7 @@ const department = ref({})
 
 const pagination = ref(true)
 
-const getOfficeFromBE = async () => {
+const getOfficeData = async () => {
   try {
     loading.value = true
     const id = route.params.id
@@ -44,7 +44,7 @@ const getOfficeFromBE = async () => {
   }
 }
 
-const getServiceFromBE = async (service_id) => {
+const getServiceData = async (service_id) => {
   try {
     loading.value = true
     service.value = await getService(service_id)
@@ -56,7 +56,7 @@ const getServiceFromBE = async (service_id) => {
   }
 }
 
-const getDepartmentFromBE = async (department_id) => {
+const getDepartmentData = async (department_id) => {
   try {
     if(!department_id) return
     loading.value = true
@@ -69,7 +69,7 @@ const getDepartmentFromBE = async (department_id) => {
   }
 }
 
-const getOfficesFromBE = async () => {
+const getOfficesData = async () => {
   try {
     loading.value = true
     const filter = {
@@ -86,12 +86,12 @@ const getOfficesFromBE = async () => {
 }
 
 onMounted( async () => {
-  await getOfficeFromBE()
+  await getOfficeData()
   
   if(office.value.service_id)
-    await getServiceFromBE(office.value.service_id)
+    await getServiceData(office.value.service_id)
   if(office.value.department_id)
-    await getDepartmentFromBE(office.value.department_id)
+    await getDepartmentData(office.value.department_id)
   
     const tmpBreadcrumbs = route.fullPath.split('/').filter((el) => el !== '')
   for (let index = 0; index < tmpBreadcrumbs.length; index++) {

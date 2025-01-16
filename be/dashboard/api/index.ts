@@ -35,7 +35,8 @@ import {
 } from './search'
 
 import {
-  uploadImage
+  uploadImage,
+  getImage
 } from './upload'
 
 export {
@@ -60,5 +61,6 @@ export {
   createUser,
   deleteUser,
   getSearch,
-  uploadImage
+  uploadImage,
+  getImage
 }

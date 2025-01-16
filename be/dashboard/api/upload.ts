@@ -1,10 +1,8 @@
 import { BE_PATH } from '@/utils/constants'
 
-const COLLECTION = 'upload'
-
 const uploadImage = async (body: object) => {
   try{
-    const data = await $fetch(`${BE_PATH}/${COLLECTION}`, {
+    const data = await $fetch(`${BE_PATH}/upload`, {
       method: 'POST',
       body
     })
@@ -14,6 +12,16 @@ const uploadImage = async (body: object) => {
   }
 }
 
+const getImage = async (filePath: string) => {
+  try{
+    const data = await $fetch(`${BE_PATH}${filePath}`)
+    return data
+  } catch(err) {
+    console.error(err)
+  }
+}
+
 export {
-  uploadImage
+  uploadImage,
+  getImage
 }

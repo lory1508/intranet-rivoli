@@ -94,7 +94,35 @@ router.get(`/api/${COLLECTION}/:id`, async (req, res) => {
   // Get a single post
   let collection = await db.collection(COLLECTION);
   let query = {_id: new BSON.ObjectId(req.params.id)};
-  let result = await collection.findOne(query);
+  let result = await collection.aggregate([
+    {
+      $match: query,
+    },
+    {
+      $lookup: {
+        from: 'departments',
+        localField: "department_id",
+        foreignField: "_id",
+        as: "department_info"
+      }
+    },
+    {
+      $lookup: {
+        from: 'services',
+        localField: "service_id",
+        foreignField: "_id",
+        as: "service_info"
+      }
+    },
+    {
+      $lookup: {
+        from: 'offices',
+        localField: "office_id",
+        foreignField: "_id",
+        as: "office_info"
+      }
+    }
+  ]).toArray()
   
   if (!result) 
     return res.sendStatus(404);

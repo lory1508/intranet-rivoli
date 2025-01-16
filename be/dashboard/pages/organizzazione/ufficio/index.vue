@@ -14,7 +14,7 @@
 
     <OfficeTable :showActions="true" :data="offices" :pagination="pagination" />
   </div>
-  <OfficeModal ref="officeModalRef" :office="officeToBeUpdated" @close="getOfficesFromBE" />
+  <OfficeModal ref="officeModalRef" :office="officeToBeUpdated" @close="getOfficesData" />
 </template>
 
 <script setup>
@@ -41,7 +41,7 @@ const createOffice = async () => {
   officeModalRef.value.show = !officeModalRef.value.show
 }
 
-const getOfficesFromBE = async () => {
+const getOfficesData = async () => {
   try{
     loading.value = true
     offices.value = await getOffices()
@@ -54,6 +54,6 @@ const getOfficesFromBE = async () => {
 }
 
 onMounted(async () => {
-  await getOfficesFromBE()
+  await getOfficesData()
 })
 </script>
