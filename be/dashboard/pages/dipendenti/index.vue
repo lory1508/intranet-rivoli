@@ -2,7 +2,7 @@
   <Loader v-if="loading" />
   <div v-else class="flex flex-col">
     <div class="flex flex-row gap-2 h-fit">
-      <NH1>{{labels.user.title}}</NH1>
+      <NH1>{{labels.user.plural}}</NH1>
 
       <NPopover trigger="hover">
         <template #trigger>
