@@ -59,7 +59,7 @@ export const createUserValidationSchema = {
     },
   },
   address:{},
-  photo:{},
+  image:{},
   enabled:{},
   admin:{},
 }
@@ -144,8 +144,8 @@ export const createNewsValidationSchema = {
   tag_ids: {},
   visible: {},
   highlighted: {},
-  images: {},
-  attachments: {},
+  images: [],
+  attachments: [],
 }
 
 export const createNewsCategoryValidationSchema = {

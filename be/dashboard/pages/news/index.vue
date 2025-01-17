@@ -15,6 +15,7 @@
     <NewsTable
       :news="news"
       :pagination="pagination"
+      @refresh="getNewsData"
     />
   </div>
   <NewsModal ref="NewsModalRef" :news="newsToBeUpdated" @close="getNewsData" />

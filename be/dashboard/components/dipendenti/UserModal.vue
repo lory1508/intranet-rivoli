@@ -94,11 +94,11 @@
           </NFormItem>
         </div>
         <!-- Not implemented yet -->
-        <NFormItem path="photo" :label="labels.form.photo" class="col-span-full">
+        <NFormItem path="image" :label="labels.form.image" class="col-span-full">
           <NUpload
             directory-dnd
             :action="`${BE_PATH}/upload`"
-            :custom-request="uploadPhoto"
+            :custom-request="uploadImageData"
             accept=".png,.jpg,.jpeg"
           >
             <NUploadDragger>
@@ -159,7 +159,7 @@ const props = defineProps({
     service_id: "",
     office_id: "",
     address: "",
-    photo: "",
+    image: "",
     enabled: true,
     admin: "",
     username: "",
@@ -189,7 +189,7 @@ const defaultUser = {
   service_id: "",
   office_id: "",
   address: "",
-  photo: "",
+  image: "",
   enabled: true,
   admin: "",
   username: "",
@@ -323,7 +323,7 @@ const getDepartmentsData = async () => {
   }
 }
 
-const uploadPhoto = async ({
+const uploadImageData = async ({
   file,
   data,
   headers,
@@ -335,10 +335,10 @@ const uploadPhoto = async ({
 }) => {
   try{
     const formData = new FormData();
-    formData.append("photo", file.file);
+    formData.append("image", file.file);
     const res = await uploadImage(formData)
-    newUser.value.photo = res.avatarUrl
-    message.success(labels.alerts.photoUploaded)
+    newUser.value.image = res.avatarUrl
+    message.success(labels.alerts.imageUploaded)
   } catch (err) {
     console.error("ERROR: ", err)
     message.error(labels.errors.generic)

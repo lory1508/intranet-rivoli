@@ -274,18 +274,12 @@ const title = computed(() => {
 
 const uploadAttachments = async ({
   file,
-  data,
-  headers,
-  action,
-  onFinish,
-  onError,
-  onProgress
 }) => {
   try{
     const formData = new FormData();
     formData.append("attachments", file.file);
-    const res = await uploadAttachment(formData, slugify(newNews.value.title))
-    newNews.value.photo = res.avatarUrl
+    const res = await uploadAttachment(formData, `news/${slugify(newNews.value.title)}/attachments`)
+    newNews.value.attachments.push(res.attachmentUrl)
     message.success(labels.alerts.attachmentUploaded)
   } catch (err) {
     console.error("ERROR: ", err)
@@ -295,18 +289,12 @@ const uploadAttachments = async ({
 
 const uploadImages = async ({
   file,
-  data,
-  headers,
-  action,
-  onFinish,
-  onError,
-  onProgress
 }) => {
   try{
     const formData = new FormData();
-    formData.append("images", file.file);
-    const res = await uploadImage(formData, slugify(newNews.value.title))
-    newNews.value.photo = res.avatarUrl
+    formData.append("image", file.file);
+    const res = await uploadImage(formData, `news/${slugify(newNews.value.title)}/images`)
+    newNews.value.images.push(res.imageUrl)
     message.success(labels.alerts.imageUploaded)
   } catch (err) {
     console.error("ERROR: ", err)
@@ -356,7 +344,7 @@ watch(show, async (newShowValue) => {
     } else {
       newNews.value = {...defaultNews}
     }
-    isCreate.value = !Boolean(props.news?.email)
+    isCreate.value = !Boolean(props.news?.title)
   }
 })
 

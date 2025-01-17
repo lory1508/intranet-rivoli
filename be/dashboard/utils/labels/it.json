@@ -72,6 +72,7 @@
     "title": "Titolo",
     "visible": "Visibile",
     "highlighted": "In evidenza",
+    "content": "Contenuto",
     "fax": "Fax",
     "email": "Email",
     "room": "Stanza",
@@ -102,7 +103,6 @@
     "userCreated": "Dipendente creato con successo.",
     "userUpdated": "Dipendente aggiornato con successo.",
     "userDeleted": "Dipendente eliminato con successo.",
-    "photoUploaded": "Foto caricata con successo.",
     "attachmentUploaded": "Allegato caricato con successo.",
     "imageUploaded": "Immagine caricata con successo",
     "newsCreated": "Notizia creata con successo.",
@@ -138,7 +138,7 @@
     "service": "Servizio",
     "office": "Ufficio",
     "address": "Indirizzo",
-    "photo": "Foto",
+    "image": "Foto",
     "enabled": "Visibile",
     "disabled": "Non visibile",
     "admin": "Abilitato alle modifiche",
@@ -151,6 +151,7 @@
     "search": "Cerca"
   },
   "errors": {
-    "generic": "Si è verificato un errore, riprova più tardi."
+    "generic": "Si è verificato un errore, riprova più tardi.",
+    "noContent": "Non è stato impostato nessun contenuto."
   }
 }

@@ -1,15 +1,10 @@
 import { Router } from 'express'
-import { BSON } from 'bson'
-import { LIMIT_UPLOAD } from '../utils/constants.mjs';
-import db from '../../db/conn.mjs'
-
+import fs from 'fs'
 import multer from 'multer'
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 const router = Router();
-
-// let newFileName = ""
 
 // Setup __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -20,8 +15,19 @@ const rootPath = path.join(__dirname, '../../'); // Navigate to the root directo
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadPath = path.join(rootPath, 'uploads');
-    cb(null, uploadPath); // Save files to the "uploads" directory
+    try {
+      const subpath = req.query?.subpath || '';
+      const uploadPath = path.join(rootPath, `uploads${subpath}`);
+      
+      // Create the directory if it doesn't exist
+      if (!fs.existsSync(uploadPath)) {
+        fs.mkdirSync(uploadPath, { recursive: true }); // Ensure all subdirectories are created
+      }
+
+      cb(null, uploadPath); // Save files to the determined upload path
+    } catch (error) {
+      cb(new Error(`Failed to create upload directory: ${error.message}`)); // Pass the error to multer
+    }
   },
   filename: (req, file, cb) => {
     const uniqueName = `${Date.now()}-${file.originalname}`;
@@ -31,18 +37,19 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage })
 
-router.post('/api/upload', upload.single('photo'), async (req, res, next) => {
+router.post('/api/upload', upload.single('image'), async (req, res, next) => {
   try {
     const file = req.file;
+    const subpath = `${req.query?.subpath}/` || ''
 
     if (!file) {
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
     // Generate the file URL (adjust based on your hosting setup)
-    const avatarUrl = `/uploads/${file.filename}`;
+    const imageUrl = `/uploads/${subpath}${file.filename}`;
 
-    res.json({ message: 'Avatar uploaded successfully', avatarUrl });
+    res.json({ message: 'Image uploaded successfully', imageUrl });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to upload avatar' });

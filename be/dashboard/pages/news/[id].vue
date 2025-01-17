@@ -55,7 +55,14 @@
         </div>
         <div class="flex flex-col">
           <NH3 class="mb-0">{{ labels.form.content }}</NH3>
-          <div class="w-full text-wrap">{{ news.content }}</div>
+          <div v-if="news.content" class="w-full text-wrap">{{ news.content }}</div>
+          <div v-else class="w-full italic text-wrap">{{ labels.errors.noContent }}</div>
+        </div>
+        <div>
+          <NImage
+            width="100"
+            src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
+          />
         </div>
         <pre>{{news}}</pre>
       </div>
@@ -71,7 +78,7 @@ import labels from "~/utils/labels/it.json";
 
 // components
 import { Pencil, ArrowForward, Star, StarOutline } from "@vicons/ionicons5";
-import { NCard, NIcon, NButton, NTag, NH2, NH3 } from "naive-ui";
+import { NCard, NIcon, NButton, NTag, NH2, NH3, NImage } from "naive-ui";
 import PageHeader from "~/components/PageHeader.vue";
 import Loader from "~/components/Loader.vue";
 import NewsModal from "~/components/news/NewsModal.vue";
@@ -81,7 +88,7 @@ const route = useRoute()
 const news = ref({})
 const tags_info = ref([])
 const category_info = ref({})
-const photo = ref("")
+const images = ref([])
 const imageUrl = ref("")
 
 const breadcrumbs = ref([])
@@ -96,9 +103,15 @@ const getNewsData = async () => {
     news.value = res
     tags_info.value = news.value.tags_info
     category_info.value = news.value.category_info
-    // photo.value = await getImage(news.value.photo)
+    for await (const img of news.value.images) {
+      images.value.push( await getImage(img))
+    }
+
+    console.log(images.value)
     
-    // photo.value = URL.createObjectURL(photo.value)
+    // image.value = await getImage(news.value.image)
+    
+    // image.value = URL.createObjectURL(image.value)
   } catch (error) {
     console.error(error)
   } finally {

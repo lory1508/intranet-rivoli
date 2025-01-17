@@ -12,7 +12,7 @@
 import { NTag, NIcon, NDataTable, NButton, NButtonGroup, NPopconfirm } from 'naive-ui'
 import { Checkmark, Close } from '@vicons/ionicons5'
 import { ref, h } from 'vue'
-import { deleteUser } from '~/api'
+import { deleteNews } from '~/api'
 import { formatDate,getExtract } from '@/utils/utils'
 import labels from '@/utils/labels/it.json'
 
@@ -220,7 +220,7 @@ const columns = [
           h(
             NPopconfirm,
             {
-              onPositiveClick: () => deleteUserData(row._id),
+              onPositiveClick: () => deleteNewsData(row._id),
               positiveButtonProps: {
                 type: "error"
               }
@@ -254,10 +254,10 @@ const goToDetails = async (depId) => {
   })
 }
 
-const deleteUserData = async (id) => {
+const deleteNewsData = async (id) => {
   try{
     loading.value = true
-    await deleteUser(id)
+    await deleteNews(id)
     emit('refresh')
   } catch ( err ) {
     console.error(err)
