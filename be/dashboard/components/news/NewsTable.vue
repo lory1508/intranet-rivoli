@@ -9,15 +9,12 @@
 </template>
 
 <script setup>
-import { NH1, NTag, NIcon, NDataTable, NButton, NButtonGroup, NPopover, NPopconfirm } from 'naive-ui'
-import { Checkmark, Close, ShieldCheckmark, ShieldOutline } from '@vicons/ionicons5'
+import { NTag, NIcon, NDataTable, NButton, NButtonGroup, NPopconfirm } from 'naive-ui'
+import { Checkmark, Close } from '@vicons/ionicons5'
 import { ref, h } from 'vue'
-import { getUsers, deleteUser } from '~/api'
+import { deleteUser } from '~/api'
 import { formatDate,getExtract } from '@/utils/utils'
 import labels from '@/utils/labels/it.json'
-
-// components
-import Loader from '~/components/Loader.vue'
 
 const props = defineProps({
   news: {
@@ -36,7 +33,6 @@ const props = defineProps({
 const emit = defineEmits(['update', 'refresh'])
 
 const loading = ref(true)
-const officeModalRef = ref()
 
 const columns = [
   {
@@ -103,9 +99,9 @@ const columns = [
     }
   },
   {
-    title: labels.columns.department,
+    title: labels.columns.tags,
     render(row) {
-      const deps = row.department_info.map((depKey) => {
+      const services = row.tag_info.map((tagKey) => {
         return h(
           NTag,
           {
@@ -116,28 +112,7 @@ const columns = [
             bordered: false
           },
           {
-            default: () => depKey.name
-          }
-        )
-      })
-      return deps
-    }
-  },
-  {
-    title: labels.columns.service,
-    render(row) {
-      const services = row.service_info.map((serKey) => {
-        return h(
-          NTag,
-          {
-            style: {
-              marginRight: '6px'
-            },
-            type: 'success',
-            bordered: false
-          },
-          {
-            default: () => serKey.name
+            default: () => tagKey.name
           }
         )
       })
@@ -158,24 +133,53 @@ const columns = [
     }
   },
   {
-    title: labels.columns.office,
+    title: labels.columns.categories,
     render(row) {
-      const offs = row.office_info.map((offKey) => {
+      const services = row.category_info.map((catKey) => {
         return h(
           NTag,
           {
             style: {
               marginRight: '6px'
             },
-            type: 'warning',
+            type: 'success',
             bordered: false
           },
           {
-            default: () => offKey.name
+            default: () => catKey.name
           }
         )
       })
-      return offs
+      
+      return services.length ? services : h(NTag,
+        {
+          style: {
+            marginRight: '6px',
+            fontStyle: 'italic'
+          },
+          type: 'success',
+          bordered: false
+        },
+        {
+          default: () => "Nessun servizio associato"
+        }
+      )
+    }
+  },
+  {
+    title: labels.columns.dateFrom,
+    key: "date_from",
+    sorter: (a, b) => new Date(a.date_from) - new Date(b.date_from),
+    render(row) {
+      return formatDate(row.date_from, false)
+    }
+  },
+  {
+    title: labels.columns.dateTo,
+    key: "date_to",
+    sorter: (a, b) => new Date(a.date_to) - new Date(b.date_to),
+    render(row) {
+      return formatDate(row.date_to, false)
     }
   },
   {
@@ -246,7 +250,7 @@ const columns = [
 
 const goToDetails = async (depId) => {
   await navigateTo({
-    path: `/dipendenti/${depId}`
+    path: `/news/${depId}`
   })
 }
 

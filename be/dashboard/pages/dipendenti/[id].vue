@@ -141,10 +141,10 @@ const getUserData = async () => {
   try {
     loading.value = true
     const res = await getUser( route.params.id )
-    user.value = res[0]
-    department.value = res[0].department_info[0]
-    service.value = res[0].service_info[0]
-    office.value = res[0].office_info[0]
+    user.value = res
+    department.value = res.department_info[0]
+    service.value = res.service_info[0]
+    office.value = res.office_info[0]
     photo.value = await getImage(user.value.photo)
     
     photo.value = URL.createObjectURL(photo.value)

@@ -427,7 +427,7 @@ watch(newUser,
 
     if(newValue.firstname && newValue.lastname){
       newUser.value.email = `${newValue.firstname.toLowerCase()}.${newValue.lastname.toLowerCase()}`
-      newUser.value.username = `${Array.from(newValue.firstname.toLowerCase())[0]}.${newValue.lastname.toLowerCase()}`
+      newUser.value.username = `${Array.from(newValue.firstname.toLowerCase())}.${newValue.lastname.toLowerCase()}`
     }
 
     if(newValue.department_id){

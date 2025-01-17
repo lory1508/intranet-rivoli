@@ -345,7 +345,6 @@ const getNewsCategoriesData = async () => {
 }
 
 watch(show, async (newShowValue) => {
-  console.log("SHOW: ", newShowValue)
   await getNewsTagsData()
   await getNewsCategoriesData()
   if(!newShowValue){
@@ -363,7 +362,7 @@ watch(show, async (newShowValue) => {
 
 watch(newNews, 
   (newValue) => {
-    showError.value = (newValue.title?.length < MIN_LENGTH_5 || newValue.title?.length > MAX_LENGTH_180)
+    showError.value = (newValue.title?.length < MIN_LENGTH_5 || newValue.title?.length > MAX_LENGTH_180) || newValue.date_from === null
   },
   { deep: true }
 )

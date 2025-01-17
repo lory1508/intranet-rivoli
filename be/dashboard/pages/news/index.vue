@@ -2,139 +2,62 @@
   <Loader v-if="loading" />
   <div v-else class="flex flex-col">
     <div class="flex flex-row gap-2 h-fit">
-      <NH1>{{labels.department.plural}}</NH1>
+      <NH1>{{labels.news.title}}</NH1>
 
       <NPopover trigger="hover">
         <template #trigger>
-          <ButtonAdd @click="createDepartment" />
+          <ButtonAdd @click="createNews" />
         </template>
-        <span>{{ labels.department.create.label }}</span>
+        <span>{{ labels.news.create.label }}</span>
       </NPopover>
     </div>
 
-    <DepartmentsTable
-      :departments="departments"
+    <NewsTable
+      :news="news"
       :pagination="pagination"
     />
   </div>
-  <NewsModal ref="NewsModalRef" :department="departmentToBeUpdated" @close="getDepartmentsData" />
+  <NewsModal ref="NewsModalRef" :news="newsToBeUpdated" @close="getNewsData" />
 </template>
 
 <script setup>
-import { NH1, NIcon, NDataTable, NButton, NButtonGroup, NPopover, NPopconfirm } from 'naive-ui'
-import { Add } from '@vicons/ionicons5'
-import { ref, h } from 'vue'
-import { getDepartments, deleteDepartment } from '~/api'
-import { formatDate } from '@/utils/utils'
+import { NH1, NPopover } from 'naive-ui'
+import { ref } from 'vue'
+import { getAllNews, deleteNews } from '~/api'
 import labels from '@/utils/labels/it.json'
 
 // components
 import NewsModal from '~/components/news/NewsModal.vue'
-import DepartmentsTable from '~/components/organizzazione/DepartmentsTable.vue'
+import NewsTable from '~/components/news/NewsTable.vue'
 import Loader from '~/components/Loader.vue'
 
-const departments = ref([])
+const news = ref([])
 const pagination = ref(false)
 const loading = ref(true)
-const departmentToBeUpdated = ref()
+const newsToBeUpdated = ref()
 
 const NewsModalRef = ref()
 
-const columns = [
-  {
-    title: labels.columns.name,
-    key: "name",
-    render(row) {
-      return h(
-        'div',
-        {
-          class: "cursor-pointer hover:underline",
-          onClick: () => goToDetails(row._id)
-        },
-        {
-          default: () => row.name
-        }
-      )
-    }
-  },
-  {
-    title: labels.columns.createdAt,
-    key: "created_at",
-    render(row) {
-      return formatDate(row.created_at)
-    }
-  },
-  {
-    key: "actions",
-    render(row) {
-      return h(
-        NButtonGroup,
-        [
-          h(
-            NButton,
-            {
-              strong: false,
-              round: true,
-              secondary: true,
-              type: "warning",
-              size: "small",
-              class: "mr-2",
-              onClick: () => openNewsModal('update', row)
-            },
-            { default: () => labels.actions.edit
-            },
-          ),
-          h(
-            NPopconfirm,
-            {
-              onPositiveClick: () => deleteDepartmentData(row._id),
-              positiveButtonProps: {
-                type: "error"
-              }
-            },
-            {
-              default: () => labels.actions.confirmDelete,
-              trigger: () => h(
-                NButton,
-                {
-                  strong: false,
-                  round: true,
-                  secondary: true,
-                  type: "error",
-                  size: "small",
-                },
-                { 
-                  default: () => labels.actions.delete
-                },
-              )
-            }
-          )
-        ]
-      )
-    }
-  }
-];
-
-const goToDetails = async (depId) => {
+const goToDetails = async (newsId) => {
   await navigateTo({
-    path: `/organizzazione/direzione/${depId}`
+    path: `/news/${newsId}`
   })
 }
 
-const createDepartment = async () => {
+const createNews = async () => {
   NewsModalRef.value.show = !NewsModalRef.value.show
 }
 
-const openNewsModal = (operation = 'create', department) => {
+const openNewsModal = (operation = 'create', news) => {
   if(operation=='update')
-    departmentToBeUpdated.value = department
+    newsToBeUpdated.value = news
   NewsModalRef.value.show = !NewsModalRef.value.show
 }
 
-const getDepartmentsData = async () => {
+const getNewsData = async () => {
   try{
     loading.value = true
-    departments.value = await getDepartments()
+    news.value = await getAllNews()
   } catch (err) {
     console.error(err)
   } finally {
@@ -142,11 +65,11 @@ const getDepartmentsData = async () => {
   }
 }
 
-const deleteDepartmentData = async (id) => {
+const deleteNewsData = async (id) => {
   try{
     loading.value = true
-    await deleteDepartment(id)
-    await getDepartmentsData()
+    await deleteNews(id)
+    await getNewsData()
   } catch ( err ) {
     console.error(err)
   } finally {
@@ -155,6 +78,6 @@ const deleteDepartmentData = async (id) => {
 }
 
 onMounted(async () => {
-  await getDepartmentsData()
+  await getNewsData()
 })
 </script>
