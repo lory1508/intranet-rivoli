@@ -46,13 +46,13 @@ router.get(
         }
       ]).toArray()
 
-        if (!results || results.length === 0) {
-          // If no results is found, return a 404
-          return res.sendStatus(404);
-        } else {
-          // Return the first (and only) object from the result array
-          return res.status(200).json(results[0]);
-        }
+      if (!results || results.length === 0) {
+        // If no results is found, return a 404
+        return res.sendStatus(404);
+      } else {
+        // Return the first (and only) object from the result array
+        return res.status(200).send(results);
+      }
     } catch (error) {
       return res.sendStatus(500);
     }
