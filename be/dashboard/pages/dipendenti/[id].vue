@@ -17,7 +17,7 @@
         </NButton>
       </template>
       <div class="flex flex-col gap-4">
-        <NuxtImg :src="image" alt="user image" class="max-w-96" />
+        <NuxtImg v-if="user.photo" :src="image" alt="user image" class="max-w-96" />
         <div class="flex flex-row items-center gap-8">
           <div class="flex flex-row gap-2">
             <NIcon size="20">
@@ -145,9 +145,10 @@ const getUserData = async () => {
     department.value = res.department_info[0]
     service.value = res.service_info[0]
     office.value = res.office_info[0]
-    image.value = await getImage(user.value.image)
-    
-    image.value = URL.createObjectURL(image.value)
+    if(user.value.photo){
+      image.value = await getImage(user.value.photo)
+      image.value = URL.createObjectURL(image.value)
+    }
   } catch (error) {
     console.error(error)
   } finally {
