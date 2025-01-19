@@ -21,7 +21,30 @@ const getImage = async (filePath: string) => {
   }
 }
 
+const uploadAttachment = async (body: object, subpath: string) => {
+  try{
+    const data = await $fetch(`${BE_PATH}/uploadAttachment?subpath=${subpath}`, {
+      method: 'POST',
+      body
+    })
+    return data
+  } catch(err) {
+    console.error(err)
+  }
+}
+
+const getAttachment = async (filePath: string) => {
+  try{
+    const data = await $fetch(`${BE_PATH}${filePath}`)
+    return data
+  } catch(err) {
+    console.error(err)
+  }
+}
+
 export {
   uploadImage,
-  getImage
+  getImage,
+  uploadAttachment,
+  getAttachment
 }

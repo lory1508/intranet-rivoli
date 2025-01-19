@@ -124,13 +124,12 @@
 </template>
 
 <script setup>
-import { useMessage, NDatePicker, NUpload, NUploadDragger, NText, NP, NModal, NCard, NButton, NIcon, NInput, NForm, NFormItem, NSelect, NSwitch, NInputNumber, NInputGroup, NInputGroupLabel } from 'naive-ui';
+import { useMessage, NDatePicker, NUpload, NUploadDragger, NText, NP, NModal, NCard, NButton, NIcon, NInput, NForm, NFormItem, NSelect, NSwitch } from 'naive-ui';
 import { ref, computed, watch } from 'vue'
-import { Call, Location, Mail, MapSharp, Save, Archive } from '@vicons/ionicons5'
-import { createNews, updateNews, uploadImage, getNewsTags, getNewsCategories, createNewsTag, createNewsCategory } from '~/api';
-import { MIN_LENGTH_5, MAX_LENGTH_180, MIN_LENGTH_NAME, MAX_LENGTH_NAME, MIN_LENGTH_USERNAME, MAX_LENGTH_USERNAME, MIN_INTERNO, MAX_INTERNO, EMAIL_DOMAIN } from '@/utils/constants';
+import { Save, Archive } from '@vicons/ionicons5'
+import { createNews, updateNews, uploadImage, uploadAttachment, getNewsTags, getNewsCategories, createNewsTag, createNewsCategory } from '~/api';
+import { MIN_LENGTH_5, MAX_LENGTH_180 } from '@/utils/constants';
 import labels from '@/utils/labels/it.json'
-import mongoose from "mongoose"
 import { slugify } from '@/utils/utils'
 
 const message = useMessage()

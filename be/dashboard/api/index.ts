@@ -36,7 +36,9 @@ import {
 
 import {
   uploadImage,
-  getImage
+  getImage,
+  uploadAttachment,
+  getAttachment
 } from './upload'
 
 import {
@@ -87,6 +89,8 @@ export {
   getSearch,
   uploadImage,
   getImage,
+  uploadAttachment,
+  getAttachment,
   getAllNews,
   getNews,
   updateNews,

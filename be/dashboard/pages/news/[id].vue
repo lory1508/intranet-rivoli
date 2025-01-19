@@ -32,7 +32,7 @@
               <span v-else class="px-2 py-1 font-semibold text-red-800 bg-red-200 border border-red-400 rounded-sm" >{{ labels.form.disabled }}</span>
             </div>
             <div>
-              <span v-if="!news.highlighted" class="px-2 py-1 font-semibold border rounded-sm text-amber-800 bg-amber-200 border-amber-400" >
+              <span v-if="news.highlighted" class="px-2 py-1 font-semibold border rounded-sm text-amber-800 bg-amber-200 border-amber-400" >
                 <NIcon class="pt-[1px]"><Star /></NIcon>
                 {{ labels.form.highlighted }}
               </span>
@@ -58,11 +58,15 @@
           <div v-if="news.content" class="w-full text-wrap">{{ news.content }}</div>
           <div v-else class="w-full italic text-wrap">{{ labels.errors.noContent }}</div>
         </div>
-        <div>
-          <NImage
-            width="100"
-            src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
-          />
+        <div v-if="images.length">
+          <NH3>{{ labels.form.images }}</NH3>
+            <NImage
+              v-for="(img, index) in images"
+              :key="`news_img_${index}`"
+              :src="img"
+              width="100"
+              class="transition-all duration-100 rounded-md shadow hover:shadow-md hover:scale-105"
+            />
         </div>
         <pre>{{news}}</pre>
       </div>
@@ -104,7 +108,9 @@ const getNewsData = async () => {
     tags_info.value = news.value.tags_info
     category_info.value = news.value.category_info
     for await (const img of news.value.images) {
-      images.value.push( await getImage(img))
+      let tmp_img = await getImage(img)
+      let url_img = URL.createObjectURL(tmp_img)
+      images.value.push(url_img)
     }
 
     console.log(images.value)
