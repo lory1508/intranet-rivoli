@@ -62,8 +62,10 @@
         <NFormItem path="images" :label="labels.form.images">
           <NUpload
             directory-dnd
+            multiple
             :action="`${BE_PATH}/upload`"
             :custom-request="uploadImages"
+            :default-file-list="newNews.images"
             accept=".png,.jpg,.jpeg"
           >
             <NUploadDragger>
@@ -84,6 +86,7 @@
         <NFormItem path="attachments" :label="labels.form.attachments">
           <NUpload
             directory-dnd
+            multiple
             :action="`${BE_PATH}/upload`"
             :custom-request="uploadAttachments"
             accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
@@ -127,8 +130,8 @@
 import { useMessage, NDatePicker, NUpload, NUploadDragger, NText, NP, NModal, NCard, NButton, NIcon, NInput, NForm, NFormItem, NSelect, NSwitch } from 'naive-ui';
 import { ref, computed, watch } from 'vue'
 import { Save, Archive } from '@vicons/ionicons5'
-import { createNews, updateNews, uploadImage, uploadAttachment, getNewsTags, getNewsCategories, createNewsTag, createNewsCategory } from '~/api';
-import { MIN_LENGTH_5, MAX_LENGTH_180 } from '@/utils/constants';
+import { createNews, getImage, updateNews, uploadImage, uploadAttachment, getNewsTags, getNewsCategories, createNewsTag, createNewsCategory } from '~/api';
+import { MIN_LENGTH_5, MAX_LENGTH_180, BE_PATH } from '@/utils/constants';
 import labels from '@/utils/labels/it.json'
 import { slugify } from '@/utils/utils'
 
@@ -331,6 +334,12 @@ const getNewsCategoriesData = async () => {
   }
 }
 
+const getFileName = (path) => {
+  if(!path) return
+  const pathArray = path.split("/")
+  return pathArray[pathArray.length - 1].split("-").slice(1).join(" ")
+}
+
 watch(show, async (newShowValue) => {
   await getNewsTagsData()
   await getNewsCategoriesData()
@@ -340,6 +349,22 @@ watch(show, async (newShowValue) => {
   } else {
     if(props.news){
       newNews.value = { ...props.news }
+      for await (const img of newNews.value.images) {
+        let tmp_img = await getImage(img)
+        let url_img = URL.createObjectURL(tmp_img)
+        console.log(img, url_img)
+        const fileName = getFileName(img)
+        const tmp_item = {
+          id: fileName,
+          name: fileName,
+          status: "finished",
+          url: `${BE_PATH}${img}`
+        }
+        images.value.push(tmp_item)
+        console.log(images.value)
+      }
+      newNews.value.images = images.value
+      console.log(newNews.value)
     } else {
       newNews.value = {...defaultNews}
     }
