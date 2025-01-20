@@ -81,38 +81,45 @@ router.post('/api/uploadAttachment', upload.single('attachments'), async (req, r
 });
 
 router.get('/api/uploads/*', (req, res) => {
-  // Extract the subpath and filename from the request
-  const subpath = req.params[0]; // This captures everything after `/api/uploads/`
-
-  // Construct the full file path
-  const filePath = path.join(process.cwd(), 'uploads', subpath);
-
-  // Send the file if it exists, otherwise send a 404 error
-  res.sendFile(filePath, (err) => {
-    if (err) {
-      console.error(err);
-      res.status(404).json({ error: 'File not found' });
-    }
-  });
+  try {
+    // Extract the subpath and filename from the request
+    const subpath = req.params[0]; // This captures everything after `/api/uploads/`
+    
+    // Construct the full file path
+    const filePath = path.join(process.cwd(), 'uploads', subpath);
+    
+    // Send the file if it exists, otherwise send a 404 error
+    res.sendFile(filePath, (err) => {
+      if (err) {
+        console.error(err);
+        res.status(404).json({ error: 'File not found' });
+      }
+    });
+  } catch (error) {
+    console.error(error)
+    return res.sendStatus(500)
+  }
 });
 
 router.get('/api/uploadAttachment/*', (req, res) => {
-  // Extract the subpath and filename from the request
-  const subpath = req.params[0]; // This captures everything after `/api/uploads/`
-
-  // Construct the full file path
-  const filePath = path.join(process.cwd(), 'uploads', subpath);
-
-  // Send the file if it exists, otherwise send a 404 error
-  res.sendFile(filePath, (err) => {
-    if (err) {
-      console.error(err);
-      res.status(404).json({ error: 'File not found' });
-    }
-  });
+  try {
+    // Extract the subpath and filename from the request
+    const subpath = req.params[0]; // This captures everything after `/api/uploads/`
+    
+    // Construct the full file path
+    const filePath = path.join(process.cwd(), 'uploads', subpath);
+    
+    // Send the file if it exists, otherwise send a 404 error
+    res.sendFile(filePath, (err) => {
+      if (err) {
+        console.error(err);
+        res.status(404).json({ error: 'File not found' });
+      }
+    });
+  } catch (error) {
+    console.error(error)
+    return res.sendStatus(500)
+  }
 });
-
-// Serve static files from the "uploads" folder
-// router.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 export default router

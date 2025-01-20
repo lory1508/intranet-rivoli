@@ -5,20 +5,20 @@ const router = Router()
 
 // Search API Endpoint
 router.get('/api/search', async (req, res) => {
-  const query = req.query.q;
-
-  if (!query) {
-    return res.status(400).json({ error: 'Query parameter is required' });
-  }
-
-  const regex = new RegExp(query, 'i'); // Case-insensitive substring matching
-
-  let userCollection = await db.collection('users');
-  let departmentCollection = await db.collection('departments');
-  let officeCollection = await db.collection('offices');
-  let serviceCollection = await db.collection('services');
-
   try {
+    const query = req.query.q;
+
+    if (!query) {
+      return res.status(400).json({ error: 'Query parameter is required' });
+    }
+
+    const regex = new RegExp(query, 'i'); // Case-insensitive substring matching
+
+    let userCollection = await db.collection('users');
+    let departmentCollection = await db.collection('departments');
+    let officeCollection = await db.collection('offices');
+    let serviceCollection = await db.collection('services');
+
     // Perform searches on each collection
     const [users, departments, offices, services] = await Promise.all([
       userCollection.aggregate([

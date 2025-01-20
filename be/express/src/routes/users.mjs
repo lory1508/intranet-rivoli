@@ -54,6 +54,7 @@ router.get(
         return res.status(200).send(results);
       }
     } catch (error) {
+      console.error(error)
       return res.sendStatus(500);
     }
   }
@@ -87,6 +88,7 @@ router.post(
       let result = await collection.insertOne(newDocument);
       return res.send(result).status(204);
     } catch (error) {
+      console.error(error)
       return res.sendStatus(500);
     }
   }
@@ -138,6 +140,7 @@ router.get(`/api/${COLLECTION}/:id`, async (req, res) => {
       return res.status(200).json(result[0]);
     }
   } catch (error) {
+    console.error(error)
     return res.sendStatus(500);
   }
 });
@@ -165,6 +168,7 @@ router.patch(`/api/${COLLECTION}/:id`, async (req, res) => {
     let result = await collection.updateOne(query, updates);
     res.send(result).status(200);
   } catch (error) {
+    console.error(error)
     return res.sendStatus(500);
   }
 });
@@ -179,6 +183,7 @@ router.delete(`/api/${COLLECTION}/:id`, async (req, res) => {
     let result = await collection.deleteOne(query);
     return res.send(result).status(200);
   } catch (error) {
+    console.error(error)
     return res.sendStatus(500);
   }
 });     
